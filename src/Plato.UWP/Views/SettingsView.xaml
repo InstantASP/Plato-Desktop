@@ -1,0 +1,62 @@
+﻿<Page
+    x:Class="Plato.UWP.Views.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Plato.UWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*" />            
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>          
+            <RowDefinition MinHeight="30" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="20" Grid.Column="0" Grid.Row="1">
+            <TextBlock Margin="0,0,0,20" FontSize="30">
+                    Settings
+            </TextBlock>
+            
+            <TextBox Margin="0,0,0,5" 
+                     Height="60" 
+                     x:Name="txtSettingsUrl" 
+                     Text="" 
+                     Header="Your Plato URL" 
+                     PlaceholderText="https://plato.url.com/"  />
+            
+            <ComboBox Margin="0,0,0,20" 
+                      Height="60" 
+                      Width="Auto"
+                      x:Name="ddlTheme"
+                      Header="Theme" PlaceholderText="Pick a default theme...">
+                <x:String>Default</x:String>
+                <x:String>Dark</x:String>
+                <x:String>Light</x:String>           
+            </ComboBox>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <!--This will make any control in this column of grid take 2/5 of total width-->
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" x:Name="btnSubmit" 
+                        Background="MediumSlateBlue" 
+                        Foreground="White" 
+                        Content="Save" 
+                        Click="btnSubmit_Click"/>
+                <Button Grid.Column="1" x:Name="btnCancel" 
+                        Content="Cancel" 
+                        Click="btnCancel_Click"/>
+            </Grid>
+            
+        </StackPanel>
+
+
+    </Grid>
+</Page>
+    

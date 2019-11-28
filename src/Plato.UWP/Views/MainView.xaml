@@ -1,0 +1,69 @@
+﻿<Page
+    x:Class="Plato.UWP.Views.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Plato.UWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*" />
+            <!--This will make any control in this column of grid take 2/5 of total width-->            
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition MinHeight="30" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="0" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="5*" />                                
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Grid.Column="0">
+                <AppBarButton Icon="Home" Click="btnHome_Click"/>
+                <AppBarButton Icon="Back" Click="btnBack_Click"/>
+                <AppBarButton Icon="Forward" Click="btnForward_Click"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="1">
+                <AppBarButton Icon="Setting" Click="Settings_Click"/>
+                <AppBarSeparator/>
+                <AppBarButton Icon="Help">
+                    <AppBarButton.Flyout>
+                        <Flyout Placement="Full">
+                            <Grid Width="400">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="24,12" MaxWidth="620">
+                                    <Image Width="320" 
+                                   HorizontalAlignment="Left"
+                                   Source="ms-appx:///Assets/LargeTile.scale-100.png" 
+                                   Stretch="UniformToFill" />
+                                    <TextBlock TextAlignment="Center" FontSize="40">Plato</TextBlock>
+                                    <TextBlock TextAlignment="Center" >
+                                        <Hyperlink NavigateUri="https://plato.instantasp.co.uk/">plato.instantasp.co.uk</Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,20,0,0" TextAlignment="Center">© InstantASP Ltd</TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+            </StackPanel>                        
+        </Grid>        
+
+        <WebView Grid.Column="0" Grid.Row="1"
+                 HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"                     
+                     x:Name="webView1" Source="https://plato.instantasp.co.uk/"/>     
+        
+    </Grid>
+</Page>
+    

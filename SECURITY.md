@@ -1,0 +1,3 @@
+# Security
+
+We strive to ensure Plato is as secure as possible. Plato is open source software and the code can be reviewed by anyone on the internet. We are confident in the quality of our code and have nothing to hide but should you discover any vulnerabilities, attacks or room for improvement please do let us know immediately via email to [sales@instantasp.co.uk](mailto:sales@instantasp.co.uk) and we will assist as quickly as possible. 
