@@ -8,9 +8,7 @@ namespace Plato.UWP.ViewModels
     public class MainViewModel
     {
 
-        
-        public string Url { get; set; }
-
+        public string Url { get; set; } = "https://plato.instantasp.co.uk/support";
 
         ElementTheme _theme = ElementTheme.Default;
 
