@@ -6,8 +6,6 @@ namespace Plato.UWP.Configuration
     public static class AppInfo
     {
 
-        static public readonly string SettingsFileName = "settings.json";
-
         public static StorageFolder LocalFolder
         {
             get

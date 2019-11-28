@@ -121,9 +121,11 @@
     </Compile>
     <Compile Include="Configuration\AppInfo.cs" />
     <Compile Include="Models\AppSettings.cs" />
+    <Compile Include="Models\AppSettingsConstants.cs" />
     <Compile Include="Services\AppSettingsManager.cs" />
     <Compile Include="DependencyInjection\ServiceLocator.cs" />
     <Compile Include="Extensions\CompatExtensions.cs" />
+    <Compile Include="Services\IAppSettingsManager.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">

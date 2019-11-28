@@ -1,5 +1,4 @@
 ﻿using Plato.UWP.Services;
-using System;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 

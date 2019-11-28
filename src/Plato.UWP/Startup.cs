@@ -30,10 +30,10 @@ namespace Plato.UWP
         {
 
             var localFolder = AppInfo.LocalFolder;            
-            if (await localFolder.TryGetItemAsync(AppInfo.SettingsFileName) == null)
+            if (await localFolder.TryGetItemAsync(AppSettingsConstants.FileName) == null)
             {
-                var sourceSettings = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///Assets/{AppInfo.SettingsFileName}"));
-                var tagetSettings = await localFolder.CreateFileAsync(AppInfo.SettingsFileName, CreationCollisionOption.ReplaceExisting);
+                var sourceSettings = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///Assets/{AppSettingsConstants.FileName}"));
+                var tagetSettings = await localFolder.CreateFileAsync(AppSettingsConstants.FileName, CreationCollisionOption.ReplaceExisting);
                 await sourceSettings.CopyAndReplaceAsync(tagetSettings);
             }
         }

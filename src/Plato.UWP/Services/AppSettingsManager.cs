@@ -1,29 +1,20 @@
-﻿using Newtonsoft.Json;
-using Plato.UWP.Configuration;
-using Plato.UWP.Models;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Plato.UWP.Configuration;
+using Plato.UWP.Models;
 
 namespace Plato.UWP.Services
 {
 
-    public interface IAppSettingsManager
-    {
-        Task<AppSettings> GetSettings();
-
-        Task<AppSettings> SaveSettings(AppSettings settings);
-    }
-
     public class AppSettingsManager : IAppSettingsManager
-    {
-
-        public const string FileName = "settings.json";
+    {  
 
         public async Task<AppSettings> GetSettings()
         {
 
-            var path = Path.Combine(AppInfo.LocalFolder.Path, FileName);
+            var path = Path.Combine(AppInfo.LocalFolder.Path, AppSettingsConstants.FileName);
 
             var text = await ReadFileAsync(path);
             if (!string.IsNullOrEmpty(text))
@@ -38,7 +29,7 @@ namespace Plato.UWP.Services
         public async Task<AppSettings> SaveSettings(AppSettings settings)
         {
 
-            var path = Path.Combine(AppInfo.LocalFolder.Path, FileName);
+            var path = Path.Combine(AppInfo.LocalFolder.Path, AppSettingsConstants.FileName);
             var text = JsonConvert.SerializeObject(settings);
 
             try
@@ -71,4 +62,5 @@ namespace Plato.UWP.Services
         }
 
     }
+
 }
