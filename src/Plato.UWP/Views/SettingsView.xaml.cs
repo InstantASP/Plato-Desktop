@@ -5,6 +5,7 @@ using Windows.UI.Xaml.Navigation;
 using Plato.UWP.DependencyInjection;
 using Plato.UWP.Services;
 using Plato.UWP.ViewModels;
+using Plato.UWP.Models;
 
 namespace Plato.UWP.Views
 {
@@ -54,7 +55,7 @@ namespace Plato.UWP.Views
             var settingsManager = ServiceLocator.Current.GetService<IAppSettingsManager>();
 
             // Get current settings
-            var settings = await settingsManager.GetSettings();
+            var settings = await settingsManager.GetSettings() ?? new AppSettings();
 
             // Validate url
             var ok = Uri.TryCreate(txtSettingsUrl.Text, UriKind.Absolute, out Uri uriResult);

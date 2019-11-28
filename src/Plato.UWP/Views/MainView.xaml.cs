@@ -13,22 +13,27 @@ namespace Plato.UWP.Views
     public sealed partial class MainView : Page
     {
 
+        bool _navigateWithHeader = true;
+
         public MainViewModel ViewModel { get; }
 
         public MainView()
         {
             ViewModel = ServiceLocator.Current.GetService<MainViewModel>();
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         // Navigation events
-        // -------------------
+        // -------------------        
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await ViewModel.LoadAsync();
             this.RequestedTheme = ViewModel.Theme;
+                      
+            webView1.NavigationCompleted += webView1_NavigationCompleted;
             NavigateWithHeader(new Uri(ViewModel.Url));
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -41,18 +46,22 @@ namespace Plato.UWP.Views
 
         private void NavigateWithHeader(Uri uri)
         {
-            var theme = this.RequestedTheme;
-            var requestMsg = new Windows.Web.Http.HttpRequestMessage(HttpMethod.Get, uri);
+            _navigateWithHeader = true;
+            var requestMsg = new HttpRequestMessage(HttpMethod.Get, uri);
             requestMsg.Headers.Add("X-Plato-Theme", this.RequestedTheme == ElementTheme.Dark ? "dark" : "light");
-            webView1.NavigateWithHttpRequestMessage(requestMsg);
-            webView1.NavigationStarting += webView1_NavigationStarting;
+            webView1.NavigateWithHttpRequestMessage(requestMsg);            
         }
 
-        private void webView1_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        private async void webView1_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            webView1.NavigationStarting -= webView1_NavigationStarting;
-            args.Cancel = true;//cancel navigation in a handler for this event by setting the WebViewNavigationStartingEventArgs.Cancel property to true
-            NavigateWithHeader(args.Uri);
+            if (_navigateWithHeader)
+            {
+                // Upon the first request persist the theme selection within a client cookie                
+                var theme = this.RequestedTheme == ElementTheme.Dark ? "dark" : "light";
+                var script =$"window.$.Plato.storage.setCookie('plato-theme', '{theme}');";
+                await sender.InvokeScriptAsync("eval", new string[] { script });
+                _navigateWithHeader = false;
+            }         
         }
 
         // Button events
@@ -60,7 +69,7 @@ namespace Plato.UWP.Views
 
         void btnHome_Click(object sender, RoutedEventArgs e)
         {
-            NavigateWithHeader(new Uri(ViewModel.Url));
+            webView1.Navigate(new Uri(ViewModel.Url));
         }
 
         void btnBack_Click(object sender, RoutedEventArgs e)
@@ -80,18 +89,11 @@ namespace Plato.UWP.Views
             }
         }
 
-        void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Handle button click.
-        }
-
         void Settings_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(SettingsView), e);
         }
 
-
     }
-
 
 }
