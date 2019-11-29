@@ -4,6 +4,7 @@ using Plato.UWP.ViewModels;
 using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
 
@@ -98,7 +99,17 @@ namespace Plato.UWP.Views
         {
             Frame.Navigate(typeof(SettingsView), e);
         }
+
+        void btnAbout_Click(object sender, RoutedEventArgs e)
+        {
+
+            FlyoutBase.ShowAttachedFlyout(this);
+
+            //return null;
+        }
+
         
+
     }
 
 }

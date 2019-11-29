@@ -8,6 +8,45 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <FlyoutBase.AttachedFlyout>
+        <Flyout Placement="Full">
+            <Grid Width="400">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="24,12" MaxWidth="620">
+                    <Image Width="320" 
+                                       HorizontalAlignment="Left"
+                                       Source="ms-appx:///Assets/LargeTile.scale-100.png" 
+                                       Stretch="UniformToFill" />
+                    <TextBlock TextAlignment="Center" FontSize="40" Margin="0,0,0,6">Plato</TextBlock>
+                    <TextBlock TextAlignment="Center" Margin="0,0,0,24">
+                        1.0.0
+                    </TextBlock>
+                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                    <TextBlock TextAlignment="Center" Margin="0,24,0,6">
+                        <Hyperlink NavigateUri="https://plato.instantasp.co.uk/docs/categories/plato-uwp">How to use this app</Hyperlink>
+                    </TextBlock>
+                    <TextBlock TextAlignment="Center" Margin="0,6">                        
+                        <Hyperlink NavigateUri="https://github.com/InstantASP/plato.UWP">Get the source code for this app</Hyperlink>
+                    </TextBlock>                    
+                    <TextBlock TextAlignment="Center" Margin="0,6">                        
+                        <Hyperlink NavigateUri="https://plato.instantasp.co.uk/ideas/categories/plato-uwp">Suggest a Feature</Hyperlink>
+                    </TextBlock>
+                    <TextBlock TextAlignment="Center" Margin="0,6">                        
+                        <Hyperlink NavigateUri="https://plato.instantasp.co.uk/issues/categories/plato-uwp">Report a Bug</Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="0,20,0,0" TextAlignment="Center">© InstantASP Ltd</TextBlock>
+                </StackPanel>
+            </Grid>
+        </Flyout>
+    </FlyoutBase.AttachedFlyout>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*" />
@@ -24,48 +63,17 @@
                 <ColumnDefinition Width="5*" />                                
             </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Grid.Column="0">
-                <!--
-                <AppBarButton  x:Name="btnHome" Icon="Home" Click="btnHome_Click"/>
-                -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Grid.Column="0">          
                 <AppBarButton x:Name="btnBack" Icon="Back" ToolTipService.ToolTip="Back" Click="btnBack_Click"/>
                 <AppBarButton x:Name="btnForward" Icon="Forward" ToolTipService.ToolTip="Forward" Click="btnForward_Click"/>
                 <AppBarButton x:Name="btnRefresh" Icon="Refresh" ToolTipService.ToolTip="Refresh" Click="btnRefresh_Click"/>
-            </StackPanel>
-            
+            </StackPanel>            
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="1">
-                <AppBarButton Icon="Setting" ToolTipService.ToolTip="Settings" Click="Settings_Click"/>         
-                <AppBarButton Icon="More" ToolTipService.ToolTip="About">
-                    <AppBarButton.Flyout>
-                        <Flyout  x:Name="aboutFlyout" Placement="Full">
-                            <Grid Width="400">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="24,12" MaxWidth="620">
-                                    <Image Width="320" 
-                                       HorizontalAlignment="Left"
-                                       Source="ms-appx:///Assets/LargeTile.scale-100.png" 
-                                       Stretch="UniformToFill" />
-                                    <TextBlock TextAlignment="Center" FontSize="40" Margin="0,0,0,12">Plato</TextBlock>
-                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                    <TextBlock TextAlignment="Center" Margin="0,12">
-                                        <Hyperlink NavigateUri="https://plato.instantasp.co.uk/">plato.instantasp.co.uk</Hyperlink>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,20,0,0" TextAlignment="Center">© InstantASP Ltd</TextBlock>
-                                </StackPanel>
-                            </Grid>
-                        </Flyout>
-                    </AppBarButton.Flyout>
-                </AppBarButton>
+                <AppBarButton Icon="Setting" ToolTipService.ToolTip="Settings" Click="Settings_Click"/>
+                <AppBarButton Icon="Help" ToolTipService.ToolTip="About" Click="btnAbout_Click"/>
             </StackPanel>                        
         </Grid>
-
+        
         <WebView Grid.Column="0" Grid.Row="1"
                  HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"                     
