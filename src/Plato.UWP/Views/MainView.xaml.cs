@@ -98,12 +98,7 @@ namespace Plato.UWP.Views
         {
             Frame.Navigate(typeof(SettingsView), e);
         }
-
-        void ButtonWithoutFlyout_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonWithFlyout.Flyout.ShowAt(sender as FrameworkElement);
-        }
-
+        
     }
 
 }

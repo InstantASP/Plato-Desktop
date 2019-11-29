@@ -34,45 +34,37 @@
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="1">
-                <AppBarButton Icon="Setting" ToolTipService.ToolTip="Settings" Click="Settings_Click"/>
-
-                <CommandBar OverflowButtonVisibility="Collapsed" Background="Transparent" HorizontalAlignment="Left">
-                    <AppBarButton x:Name="ButtonWithoutFlyout" Icon="Help" ToolTipService.ToolTip="About" Click="ButtonWithoutFlyout_Click"/>
-                    <AppBarButton x:Name="ButtonWithFlyout" Visibility="Collapsed">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE011;"/>
-                        <AppBarButton.Flyout>
-                            <Flyout Placement="Full">
-                                <Grid Width="400">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="24,12" MaxWidth="620">
-                                        <Image Width="320" 
-                                   HorizontalAlignment="Left"
-                                   Source="ms-appx:///Assets/LargeTile.scale-100.png" 
-                                   Stretch="UniformToFill" />
-                                        <TextBlock TextAlignment="Center" FontSize="40" Margin="0,12">
-                                            Plato
-                                        </TextBlock>
-                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
-                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>                                        
-                                        <TextBlock TextAlignment="Center" Margin="0,12">
+                <AppBarButton Icon="Setting" ToolTipService.ToolTip="Settings" Click="Settings_Click"/>         
+                <AppBarButton Icon="More" ToolTipService.ToolTip="About">
+                    <AppBarButton.Flyout>
+                        <Flyout  x:Name="aboutFlyout" Placement="Full">
+                            <Grid Width="400">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="24,12" MaxWidth="620">
+                                    <Image Width="320" 
+                                       HorizontalAlignment="Left"
+                                       Source="ms-appx:///Assets/LargeTile.scale-100.png" 
+                                       Stretch="UniformToFill" />
+                                    <TextBlock TextAlignment="Center" FontSize="40" Margin="0,0,0,12">Plato</TextBlock>
+                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                    <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                    <TextBlock TextAlignment="Center" Margin="0,12">
                                         <Hyperlink NavigateUri="https://plato.instantasp.co.uk/">plato.instantasp.co.uk</Hyperlink>
-                                        </TextBlock>
-                                        <TextBlock TextAlignment="Center">© InstantASP Ltd</TextBlock>
-                                    </StackPanel>
-                                </Grid>
-                            </Flyout>
-                        </AppBarButton.Flyout>
-                    </AppBarButton>
-                </CommandBar>
-                
+                                    </TextBlock>
+                                    <TextBlock Margin="0,20,0,0" TextAlignment="Center">© InstantASP Ltd</TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
             </StackPanel>                        
-        </Grid>        
+        </Grid>
 
         <WebView Grid.Column="0" Grid.Row="1"
                  HorizontalAlignment="Stretch"
