@@ -25,37 +25,52 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Grid.Column="0">
-                <AppBarButton Icon="Home" Click="btnHome_Click"/>
-                <AppBarButton Icon="Back" Click="btnBack_Click"/>
-                <AppBarButton Icon="Forward" Click="btnForward_Click"/>
+                <!--
+                <AppBarButton  x:Name="btnHome" Icon="Home" Click="btnHome_Click"/>
+                -->
+                <AppBarButton x:Name="btnBack" Icon="Back" ToolTipService.ToolTip="Back" Click="btnBack_Click"/>
+                <AppBarButton x:Name="btnForward" Icon="Forward" ToolTipService.ToolTip="Forward" Click="btnForward_Click"/>
+                <AppBarButton x:Name="btnRefresh" Icon="Refresh" ToolTipService.ToolTip="Refresh" Click="btnRefresh_Click"/>
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="1">
-                <AppBarButton Icon="Setting" Click="Settings_Click"/>
-                <AppBarSeparator/>
-                <AppBarButton Icon="Help">
-                    <AppBarButton.Flyout>
-                        <Flyout Placement="Full">
-                            <Grid Width="400">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="24,12" MaxWidth="620">
-                                    <Image Width="320" 
+                <AppBarButton Icon="Setting" ToolTipService.ToolTip="Settings" Click="Settings_Click"/>
+
+                <CommandBar OverflowButtonVisibility="Collapsed" Background="Transparent" HorizontalAlignment="Left">
+                    <AppBarButton x:Name="ButtonWithoutFlyout" Icon="Help" ToolTipService.ToolTip="About" Click="ButtonWithoutFlyout_Click"/>
+                    <AppBarButton x:Name="ButtonWithFlyout" Visibility="Collapsed">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE011;"/>
+                        <AppBarButton.Flyout>
+                            <Flyout Placement="Full">
+                                <Grid Width="400">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel HorizontalAlignment="Center" Grid.Column="1"  Margin="24,12" MaxWidth="620">
+                                        <Image Width="320" 
                                    HorizontalAlignment="Left"
                                    Source="ms-appx:///Assets/LargeTile.scale-100.png" 
                                    Stretch="UniformToFill" />
-                                    <TextBlock TextAlignment="Center" FontSize="40">Plato</TextBlock>
-                                    <TextBlock TextAlignment="Center" >
+                                        <TextBlock TextAlignment="Center" FontSize="40" Margin="0,12">
+                                            Plato
+                                        </TextBlock>
+                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
+                                        <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>                                        
+                                        <TextBlock TextAlignment="Center" Margin="0,12">
                                         <Hyperlink NavigateUri="https://plato.instantasp.co.uk/">plato.instantasp.co.uk</Hyperlink>
-                                    </TextBlock>
-                                    <TextBlock Margin="0,20,0,0" TextAlignment="Center">© InstantASP Ltd</TextBlock>
-                                </StackPanel>
-                            </Grid>
-                        </Flyout>
-                    </AppBarButton.Flyout>
-                </AppBarButton>
+                                        </TextBlock>
+                                        <TextBlock TextAlignment="Center">© InstantASP Ltd</TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                </CommandBar>
+                
             </StackPanel>                        
         </Grid>        
 

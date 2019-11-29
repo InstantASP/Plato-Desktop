@@ -16,23 +16,27 @@
             <RowDefinition MinHeight="30" />
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="20" Grid.Column="0" Grid.Row="1">
-            <TextBlock Margin="0,0,0,20" FontSize="30">
+        <StackPanel Margin="26" Grid.Column="0" Grid.Row="1">
+            <TextBlock Margin="0,0,0,12" FontSize="30">
                     Settings
             </TextBlock>
-            
-            <TextBox Margin="0,0,0,5" 
-                     Height="60" 
+            <Line Stroke="MediumSlateBlue" X2="75"/>
+            <Line Stroke="MediumSlateBlue" X2="75"/>
+            <Line Stroke="MediumSlateBlue" X2="75"/>
+            <Line Stroke="MediumSlateBlue" X2="75"/>
+            <Line Stroke="MediumSlateBlue" X2="75"/>
+            <TextBox Margin="0,24,0,12" 
+                     Height="60"
                      x:Name="txtSettingsUrl" 
                      Text="" 
                      Header="Your Plato URL" 
-                     PlaceholderText="https://plato.url.com/"  />
-            
-            <ComboBox Margin="0,0,0,20" 
-                      Height="60" 
-                      Width="Auto"
-                      x:Name="ddlTheme"
-                      Header="Theme" PlaceholderText="Pick a default theme...">
+                     PlaceholderText="https://plato.url.com/"  />            
+            <ComboBox Margin="0,12"
+                    x:Name="ddlTheme"
+                    Height="60"    
+                    HorizontalAlignment="Stretch"
+                    Header="Theme" 
+                    PlaceholderText="Pick a default theme...">
                 <x:String>Default</x:String>
                 <x:String>Dark</x:String>
                 <x:String>Light</x:String>           
@@ -40,18 +44,32 @@
             
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <!--This will make any control in this column of grid take 2/5 of total width-->
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="5*" />                    
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" x:Name="btnSubmit" 
+                <StackPanel Orientation="Horizontal" Grid.Column="0">           
+                    <Button x:Name="btnSubmit" 
+                        Margin="0,12"
                         Background="MediumSlateBlue" 
                         Foreground="White" 
                         Content="Save" 
                         Click="btnSubmit_Click"/>
-                <Button Grid.Column="1" x:Name="btnCancel" 
+                    <HyperlinkButton 
+                        x:Name="btnCancel" 
+                        Margin="12"
                         Content="Cancel" 
+                        Foreground="Gray" 
                         Click="btnCancel_Click"/>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Column="1">
+                    <HyperlinkButton 
+                        HorizontalAlignment="Right"
+                        x:Name="btnClearCache"                      
+                        Content="Clear Local Cache" 
+                        Foreground="Gray" 
+                        Margin="12"
+                        Click="btnClearCache_Click"/>
+                </StackPanel>
             </Grid>
             
         </StackPanel>

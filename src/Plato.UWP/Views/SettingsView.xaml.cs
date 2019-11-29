@@ -48,6 +48,12 @@ namespace Plato.UWP.Views
             Frame.Navigate(typeof(MainView), e);
         }
 
+        async void btnClearCache_Click(object sender, RoutedEventArgs e)
+        {
+            await WebView.ClearTemporaryWebDataAsync();
+            Frame.Navigate(typeof(MainView), e);
+        }
+
         async void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             

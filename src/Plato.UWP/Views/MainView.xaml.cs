@@ -30,7 +30,7 @@ namespace Plato.UWP.Views
         {
             await ViewModel.LoadAsync();
             this.RequestedTheme = ViewModel.Theme;
-                      
+
             webView1.NavigationCompleted += webView1_NavigationCompleted;
             NavigateWithHeader(new Uri(ViewModel.Url));
 
@@ -58,7 +58,7 @@ namespace Plato.UWP.Views
             {
                 // Upon the first request persist the theme selection within a client cookie                
                 var theme = this.RequestedTheme == ElementTheme.Dark ? "dark" : "light";
-                var script =$"window.$.Plato.storage.setCookie('plato-theme', '{theme}');";
+                var script =$"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}";
                 await sender.InvokeScriptAsync("eval", new string[] { script });
                 _navigateWithHeader = false;
             }         
@@ -89,9 +89,19 @@ namespace Plato.UWP.Views
             }
         }
 
+        void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {        
+            webView1.Refresh();
+        }
+
         void Settings_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(SettingsView), e);
+        }
+
+        void ButtonWithoutFlyout_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonWithFlyout.Flyout.ShowAt(sender as FrameworkElement);
         }
 
     }
