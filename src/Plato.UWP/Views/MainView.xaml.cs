@@ -42,10 +42,12 @@ namespace Plato.UWP.Views
                         
             webView1.NavigationStarting += WebView1_NavigationStarting;
             webView1.NavigationCompleted += webView1_NavigationCompleted;
+            webView1.NavigationFailed += WebView1_NavigationFailed;
+
             NavigateWithHeader(new Uri(ViewModel.Url));
 
         }
-               
+
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             ViewModel.Unload();
@@ -62,7 +64,27 @@ namespace Plato.UWP.Views
             txtTidyAddress.Visibility = Visibility.Visible;
         }
         
-        private async void webView1_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        private void webView1_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+
+            Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 0);
+
+            switch (args.WebErrorStatus)
+            {
+                case Windows.Web.WebErrorStatus.Found:
+                    NavigationCompleted_Found(sender, args);
+                    break;
+                case Windows.Web.WebErrorStatus.NotFound:
+                    NavigationCompleted_NotFound(sender, args);
+                    break;
+                case Windows.Web.WebErrorStatus.Unknown:
+                    NavigationCompleted_Unknown(sender, args);
+                    break;
+            }
+
+        }
+
+        async void NavigationCompleted_Found(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
 
             if (_navigateWithHeader)
@@ -70,35 +92,65 @@ namespace Plato.UWP.Views
 
                 // Upon the first request persist the theme selection within a client cookie                
                 var theme = this.RequestedTheme == ElementTheme.Dark ? "dark" : "light";
-                var script =$"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}";
+                var script = $"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}";
 
                 try
                 {
                     await sender.InvokeScriptAsync("eval", new string[] { script });
                 }
                 catch
-                {                    
+                {
                 }
 
                 _navigateWithHeader = false;
 
-            }            
+            }
 
             var url = string.Empty;
             var tidyUrl = string.Empty;
             try
             {
                 url = args.Uri.ToString();
-                tidyUrl = TidyUrl(url);                
+                tidyUrl = TidyUrl(url);
             }
             finally
             {
                 txtFullAddress.Text = url;
-                txtTidyAddress.Text = tidyUrl;           
+                txtTidyAddress.Text = tidyUrl;
             }
 
-            Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 0);    
+            
 
+        }
+
+        void NavigationCompleted_NotFound(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            webView1.Navigate(new Uri("ms-appx-web:///assets/web/NotFound.html"));                      
+        }
+
+        async void NavigationCompleted_Unknown(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            
+            try
+            {
+                var theme = this.RequestedTheme == ElementTheme.Dark ? "dark" : "light";
+                await sender.InvokeScriptAsync("addCss", new string[] {
+                            $"css/app/themes/{theme}.css"
+                        });
+                await sender.InvokeScriptAsync("addUrl", new string[] {
+                            ViewModel.Url
+                        });
+            }
+            catch 
+            {              
+            }
+
+        }
+
+        private void WebView1_NavigationFailed(object sender, WebViewNavigationFailedEventArgs e)
+        {
+            txtTidyAddress.Text = "";
+            Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 0);
         }
 
         #endregion
@@ -111,8 +163,7 @@ namespace Plato.UWP.Views
         }
 
         void btnBack_Click(object sender, RoutedEventArgs e)
-        {
-         
+        {         
             if (webView1.CanGoBack)
             {
                 webView1.GoBack();
@@ -139,8 +190,24 @@ namespace Plato.UWP.Views
 
         void btnAbout_Click(object sender, RoutedEventArgs e)
         {
-
             FlyoutBase.ShowAttachedFlyout(this);
+        }
+
+        #endregion
+
+        #region "Address Bar Events"
+
+        private void txtTidyAddress_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            txtFullAddress.Visibility = Visibility.Visible;
+            txtFullAddress.Select(txtFullAddress.ContentStart, txtFullAddress.ContentEnd);
+            txtFullAddress.Focus(FocusState.Programmatic);            
+        }
+
+        private void txtFullAddress_LostFocus(object sender, RoutedEventArgs e)
+        {
+            txtFullAddress.Visibility = Visibility.Collapsed;
+            txtTidyAddress.Visibility = Visibility.Visible;
         }
 
         #endregion
@@ -179,19 +246,6 @@ namespace Plato.UWP.Views
         }
 
         #endregion
-
-        private void txtTidyAddress_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            txtFullAddress.Visibility = Visibility.Visible;
-            txtFullAddress.Select(txtFullAddress.ContentStart, txtFullAddress.ContentEnd);
-            txtFullAddress.Focus(FocusState.Programmatic);            
-        }
-
-        private void txtFullAddress_LostFocus(object sender, RoutedEventArgs e)
-        {
-            txtFullAddress.Visibility = Visibility.Collapsed;
-            txtTidyAddress.Visibility = Visibility.Visible;
-        }
 
     }
 

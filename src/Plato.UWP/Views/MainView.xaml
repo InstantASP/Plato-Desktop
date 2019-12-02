@@ -71,21 +71,20 @@
             </StackPanel>
 
             <TextBlock x:Name="txtTidyAddress"             
-                Grid.Column="1"                       
-                TextAlignment="Center"                
-                MinWidth="100"                                   
-                IsTextSelectionEnabled="False"                
+                Grid.Column="1"                
+                MinWidth="100"
+                TextAlignment="Center"
+                IsTextSelectionEnabled="False"
                 PointerPressed="txtTidyAddress_PointerPressed"
                 HorizontalAlignment="Stretch">               
             </TextBlock>
 
-            <TextBlock x:Name="txtFullAddress"             
-                Grid.Column="1"                
-                Visibility="Collapsed"                
-                TextAlignment="Center"                
-                MinWidth="100"                           
-                Tapped="txtTidyAddress_Tapped"
-                IsTextSelectionEnabled="True"                
+            <TextBlock x:Name="txtFullAddress"
+                Grid.Column="1"
+                Visibility="Collapsed"
+                TextAlignment="Center"
+                MinWidth="100"
+                IsTextSelectionEnabled="True"
                 LostFocus="txtFullAddress_LostFocus"
                 HorizontalAlignment="Stretch"/>
             
@@ -94,6 +93,12 @@
                 <AppBarButton Icon="Help" ToolTipService.ToolTip="About" Click="btnAbout_Click"/>
             </StackPanel>                        
         </Grid>
+
+        <StackPanel Grid.Column="0" Grid.Row="1"  
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+            <ProgressRing IsActive="True" Height="100" Width="100"/>             
+        </StackPanel>
         
         <WebView Grid.Column="0" Grid.Row="1"
                  HorizontalAlignment="Stretch"

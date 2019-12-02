@@ -63,8 +63,15 @@ namespace Plato.UWP.Views
             // Get current settings
             var settings = await settingsManager.GetSettings() ?? new AppSettings();
 
+            var url = txtSettingsUrl.Text;
+            if (!url.StartsWith("http://") &&
+                !url.StartsWith("https://"))
+            {
+                url = "http://" + url;
+            }
+
             // Validate url
-            var ok = Uri.TryCreate(txtSettingsUrl.Text, UriKind.Absolute, out Uri uriResult);
+            var ok = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult);
             if (ok)
             {
                 settings.Url = uriResult.ToString();

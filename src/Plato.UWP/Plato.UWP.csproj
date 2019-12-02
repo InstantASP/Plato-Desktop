@@ -143,6 +143,12 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Web\css\app\plato.css" />
+    <Content Include="Assets\Web\css\app\themes\dark.css" />
+    <Content Include="Assets\Web\css\app\themes\light.css" />
+    <Content Include="Assets\Web\css\vendors\bootstrap.css" />
+    <Content Include="Assets\Web\images\error.png" />
+    <Content Include="Assets\Web\NotFound.html" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
@@ -184,6 +190,7 @@
     <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Web\js\app\plato.js" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />

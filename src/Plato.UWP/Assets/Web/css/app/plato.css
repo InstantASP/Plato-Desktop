@@ -1,0 +1,32 @@
+html, body {
+    height: 100%;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align:left;   
+}
+
+.container > div {
+     max-width: 800px;
+}
+
+.container img {
+    float:left;
+    max-width: 125px; 
+    margin-right: 50px;
+ margin-bottom: 25px;
+}
+
+@media (max-width: 768px) {
+    .container div {
+        text-align:center;
+    }
+    .container img {
+        float: none !important;
+        margin-right: 0;       
+    }
+}
