@@ -8,72 +8,85 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Style x:Key="ThemeBackgroundBrush_WithOpacity" TargetType="Grid">
+            <Setter Property="Background" Value="{ThemeResource MyTextColor}" />
+            <Setter Property="Opacity" Value=".8" />
+        </Style>
+    </Page.Resources>
+    
+    <Grid x:Name="main">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*" />            
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>          
-            <RowDefinition MinHeight="30" />
-        </Grid.RowDefinitions>
 
-        <StackPanel Margin="26" Grid.Column="0" Grid.Row="1">
-            <TextBlock Margin="0,0,0,12" FontSize="30">
+        <Grid Grid.Column="0" Style="{StaticResource ThemeBackgroundBrush_WithOpacity}">
+            <StackPanel Margin="26" Grid.Column="0" Grid.Row="1">
+                <TextBlock Margin="0,0,0,6" Style="{StaticResource HeaderTextBlockStyle}">
                     Settings
-            </TextBlock>
-            <Line Stroke="MediumSlateBlue" X2="75"/>
-            <Line Stroke="MediumSlateBlue" X2="75"/>
-            <Line Stroke="MediumSlateBlue" X2="75"/>
-            <Line Stroke="MediumSlateBlue" X2="75"/>
-            <Line Stroke="MediumSlateBlue" X2="75"/>
-            <TextBox Margin="0,24,0,12" 
+                </TextBlock>
+                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}">
+                    Manage general application settings
+                </TextBlock>
+                <TextBox Margin="0,24,0,12" 
                      Height="60"
                      x:Name="txtSettingsUrl" 
                      Text="" 
                      Header="Your Plato URL" 
-                     PlaceholderText="https://plato.url.com/"  />            
-            <ComboBox Margin="0,12"
+                     PlaceholderText="https://plato.url.com/"  />
+                <ComboBox Margin="0,12"
                     x:Name="ddlTheme"
                     Height="60"    
                     HorizontalAlignment="Stretch"
                     Header="Theme" 
                     PlaceholderText="Pick a default theme...">
-                <x:String>Default</x:String>
-                <x:String>Dark</x:String>
-                <x:String>Light</x:String>           
-            </ComboBox>
-            
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*" />
-                    <ColumnDefinition Width="5*" />                    
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Column="0">           
-                    <Button x:Name="btnSubmit" 
+                    <x:String>Default</x:String>
+                    <x:String>Dark</x:String>
+                    <x:String>Light</x:String>
+                </ComboBox>
+                <ScrollViewer Height="510" VerticalScrollBarVisibility="Auto">
+                    <VariableSizedWrapGrid 
+                    x:Name="pnlBackgrounds" 
+                    ItemWidth="320"                        
+                    Margin="10"                                          
+                    Orientation="Horizontal"/>
+                </ScrollViewer>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <Button x:Name="btnSubmit" 
                         Margin="0,12"
                         Background="MediumSlateBlue" 
                         Foreground="White" 
                         Content="Save" 
                         Click="btnSubmit_Click"/>
-                    <HyperlinkButton 
+                        <HyperlinkButton 
                         x:Name="btnCancel" 
                         Margin="12"
                         Content="Cancel" 
                         Foreground="Gray" 
                         Click="btnCancel_Click"/>
-                </StackPanel>
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Column="1">
-                    <HyperlinkButton 
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Column="1">
+                        <HyperlinkButton 
                         HorizontalAlignment="Right"
                         x:Name="btnClearCache"                      
                         Content="Clear Local Cache" 
                         Foreground="Gray" 
                         Margin="12"
                         Click="btnClearCache_Click"/>
-                </StackPanel>
-            </Grid>
-            
-        </StackPanel>
+                    </StackPanel>
+                </Grid>
 
+            </StackPanel>
+
+
+        </Grid>
+        
+     
 
     </Grid>
 </Page>

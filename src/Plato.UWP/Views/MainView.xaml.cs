@@ -6,6 +6,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
 
@@ -15,21 +17,15 @@ namespace Plato.UWP.Views
     public sealed partial class MainView : Page
     {
 
-        bool _navigateWithHeader = true;     
+        bool _firstRequest = true;     
 
         public MainViewModel ViewModel { get; }
 
         public MainView()
         {
+      
             ViewModel = ServiceLocator.Current.GetService<MainViewModel>();
             InitializeComponent();
-
-            //then add this line
-            webView1.AddHandler(PointerPressedEvent,
-              new PointerEventHandler((s, e) => {
-                  //txtTidyAddress.IsTextSelectionEnabled = false;
-                  //this.Focus(FocusState.Programmatic);
-              }), true);
 
         }
        
@@ -37,9 +33,21 @@ namespace Plato.UWP.Views
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+
             await ViewModel.LoadAsync();
-            this.RequestedTheme = ViewModel.Theme;
-                        
+//            this.RequestedTheme = ViewModel.Theme;
+            (Window.Current.Content as ThemeAwareFrame).AppTheme = ViewModel.Theme;
+
+            if (!string.IsNullOrEmpty(ViewModel.BackgroundImage))
+            {
+                var bitmap = new BitmapImage(new Uri($"ms-appx-web:///{ViewModel.BackgroundImage}"));
+                main.Background = new ImageBrush
+                {
+                    ImageSource = bitmap,
+                    Stretch = Stretch.Fill
+                };
+            }
+
             webView1.NavigationStarting += WebView1_NavigationStarting;
             webView1.NavigationCompleted += webView1_NavigationCompleted;
             webView1.NavigationFailed += WebView1_NavigationFailed;
@@ -59,52 +67,60 @@ namespace Plato.UWP.Views
 
         private void WebView1_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
+
+            if (IsLocalUrl(args.Uri.ToString()))
+            {                
+                txtTidyAddress.Visibility = Visibility.Collapsed;
+            } 
+            else
+            {                
+                txtTidyAddress.Visibility = Visibility.Visible;
+            }
+         
+
             Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Wait, 0);
-            txtFullAddress.Visibility = Visibility.Collapsed;
-            txtTidyAddress.Visibility = Visibility.Visible;
+            myProgressRing.IsActive = true;
+
         }
         
-        private void webView1_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        private async void webView1_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
 
+            myProgressRing.IsActive = false;
             Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 0);
 
             switch (args.WebErrorStatus)
-            {
-                case Windows.Web.WebErrorStatus.Found:
-                    NavigationCompleted_Found(sender, args);
+            {          
+                case Windows.Web.WebErrorStatus.NotFound:                    
+                    webView1.Navigate(new Uri("ms-appx-web:///assets/web/NotFound.html"));
                     break;
-                case Windows.Web.WebErrorStatus.NotFound:
-                    NavigationCompleted_NotFound(sender, args);
-                    break;
-                case Windows.Web.WebErrorStatus.Unknown:
-                    NavigationCompleted_Unknown(sender, args);
+                default:
+
                     break;
             }
 
-        }
-
-        async void NavigationCompleted_Found(WebView sender, WebViewNavigationCompletedEventArgs args)
-        {
-
-            if (_navigateWithHeader)
+            try
             {
-
-                // Upon the first request persist the theme selection within a client cookie                
                 var theme = this.RequestedTheme == ElementTheme.Dark ? "dark" : "light";
-                var script = $"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}";
 
-                try
+                if (_firstRequest)
                 {
-                    await sender.InvokeScriptAsync("eval", new string[] { script });
-                }
-                catch
-                {
+                    await sender.InvokeScriptAsync("eval", new string[] {
+                        $"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}"
+                    });
                 }
 
-                _navigateWithHeader = false;
-
+                await sender.InvokeScriptAsync("addCss", new string[] {
+                            $"css/app/themes/{theme}.css"
+                        });
+                await sender.InvokeScriptAsync("addUrl", new string[] {
+                            ViewModel.Url
+                        });
             }
+            catch
+            {
+            }
+
 
             var url = string.Empty;
             var tidyUrl = string.Empty;
@@ -114,42 +130,18 @@ namespace Plato.UWP.Views
                 tidyUrl = TidyUrl(url);
             }
             finally
-            {
+            {   
                 txtFullAddress.Text = url;
                 txtTidyAddress.Text = tidyUrl;
             }
 
-            
+            myProgressRing.Visibility = Visibility.Visible;
+            _firstRequest = false;
 
         }
-
-        void NavigationCompleted_NotFound(WebView sender, WebViewNavigationCompletedEventArgs args)
-        {
-            webView1.Navigate(new Uri("ms-appx-web:///assets/web/NotFound.html"));                      
-        }
-
-        async void NavigationCompleted_Unknown(WebView sender, WebViewNavigationCompletedEventArgs args)
-        {
-            
-            try
-            {
-                var theme = this.RequestedTheme == ElementTheme.Dark ? "dark" : "light";
-                await sender.InvokeScriptAsync("addCss", new string[] {
-                            $"css/app/themes/{theme}.css"
-                        });
-                await sender.InvokeScriptAsync("addUrl", new string[] {
-                            ViewModel.Url
-                        });
-            }
-            catch 
-            {              
-            }
-
-        }
-
+        
         private void WebView1_NavigationFailed(object sender, WebViewNavigationFailedEventArgs e)
-        {
-            txtTidyAddress.Text = "";
+        {            
             Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 0);
         }
 
@@ -216,7 +208,7 @@ namespace Plato.UWP.Views
 
         void NavigateWithHeader(Uri uri)
         {
-            _navigateWithHeader = true;
+            _firstRequest = true;
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, uri);
             requestMsg.Headers.Add("X-Plato-Theme", this.RequestedTheme == ElementTheme.Dark ? "dark" : "light");
             webView1.NavigateWithHttpRequestMessage(requestMsg);
@@ -243,6 +235,11 @@ namespace Plato.UWP.Views
 
             return url;
 
+        }
+
+        bool IsLocalUrl(string url)
+        {
+            return url.ToLower().IndexOf("ms-appx-web") >= 0 ? true : false;
         }
 
         #endregion

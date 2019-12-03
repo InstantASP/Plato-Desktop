@@ -14,6 +14,7 @@ namespace Plato.UWP.ViewModels
 
         public ElementTheme Theme => _theme;
 
+        public string BackgroundImage { get; set; }
 
         private readonly IAppSettingsManager _settingsManager;
 
@@ -30,6 +31,7 @@ namespace Plato.UWP.ViewModels
         public void Unload()
         {
             Url = null;
+            BackgroundImage = null;
         }
 
         private async Task LoadSettingsAsync()
@@ -42,6 +44,11 @@ namespace Plato.UWP.ViewModels
                     Url = settings.Url;
                 }
 
+                if (!string.IsNullOrEmpty(settings.BackgroundImage))
+                {
+                    BackgroundImage = settings.BackgroundImage;
+                }
+                
                 var theme = settings.Theme.ToLower();
                 if (!string.IsNullOrEmpty(settings.Theme))
                 {

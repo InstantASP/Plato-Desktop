@@ -1,4 +1,6 @@
-﻿using Plato.UWP.Views;
+﻿using Plato.UWP.DependencyInjection;
+using Plato.UWP.Services;
+using Plato.UWP.Views;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -39,7 +41,7 @@ namespace Plato.UWP
             {
 
                 // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
+                rootFrame = new ThemeAwareFrame(ElementTheme.Dark); ;
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -53,7 +55,7 @@ namespace Plato.UWP
 
                 // Configure DI
                 ConfigureServices();
-              
+
             }
 
             if (e.PrelaunchActivated == false)
@@ -67,6 +69,8 @@ namespace Plato.UWP
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
+
+
             }
         }
 

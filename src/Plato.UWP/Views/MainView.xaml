@@ -8,6 +8,13 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style x:Key="ThemeBackgroundBrush_WithOpacity" TargetType="Grid">
+            <Setter Property="Background" Value="{ThemeResource MyTextColor}" />
+            <Setter Property="Opacity" Value=".8" />
+        </Style>
+    </Page.Resources>
+    
     <FlyoutBase.AttachedFlyout>
         <Flyout Placement="Full">
             <Grid Width="400">
@@ -30,24 +37,27 @@
                     <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
                     <Line HorizontalAlignment="Center" Stroke="MediumSlateBlue" X2="75"/>
                     <TextBlock TextAlignment="Center" Margin="0,24,0,6">
-                        <Hyperlink NavigateUri="https://plato.instantasp.co.uk/docs/categories/plato-uwp">How to use this app</Hyperlink>
+                        <Hyperlink UnderlineStyle="None" NavigateUri="https://plato.instantasp.co.uk/docs/categories/plato-uwp">How to use this app</Hyperlink>
                     </TextBlock>
                     <TextBlock TextAlignment="Center" Margin="0,6">                        
-                        <Hyperlink NavigateUri="https://github.com/InstantASP/plato.UWP">Get the source code for this app</Hyperlink>
+                        <Hyperlink UnderlineStyle="None" NavigateUri="https://github.com/InstantASP/plato.UWP">Get the source code for this app</Hyperlink>
                     </TextBlock>                    
                     <TextBlock TextAlignment="Center" Margin="0,6">                        
-                        <Hyperlink NavigateUri="https://plato.instantasp.co.uk/ideas/categories/plato-uwp">Suggest a Feature</Hyperlink>
+                        <Hyperlink UnderlineStyle="None" NavigateUri="https://plato.instantasp.co.uk/ideas/categories/plato-uwp">Suggest a Feature</Hyperlink>
                     </TextBlock>
                     <TextBlock TextAlignment="Center" Margin="0,6">                        
-                        <Hyperlink NavigateUri="https://plato.instantasp.co.uk/issues/categories/plato-uwp">Report a Bug</Hyperlink>
+                        <Hyperlink UnderlineStyle="None" NavigateUri="https://plato.instantasp.co.uk/issues/categories/plato-uwp">Report a Bug</Hyperlink>
                     </TextBlock>
                     <TextBlock Margin="0,20,0,0" TextAlignment="Center">© InstantASP Ltd</TextBlock>
                 </StackPanel>
             </Grid>
         </Flyout>
     </FlyoutBase.AttachedFlyout>
-
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+       
+    <Grid x:Name="main">
+        <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="Assets/Backgrounds/1600x1200.jpg"/>
+        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*" />
             <!--This will make any control in this column of grid take 2/5 of total width-->            
@@ -57,7 +67,8 @@
             <RowDefinition MinHeight="30" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" Grid.Row="0">
+        <Grid Grid.Column="0" Grid.Row="0" Style="{StaticResource ThemeBackgroundBrush_WithOpacity}">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="6*" />
@@ -70,24 +81,36 @@
                 <AppBarButton x:Name="btnRefresh" Icon="Refresh" ToolTipService.ToolTip="Refresh" Click="btnRefresh_Click"/>             
             </StackPanel>
 
-            <TextBlock x:Name="txtTidyAddress"             
-                Grid.Column="1"                
-                MinWidth="100"
-                TextAlignment="Center"
-                IsTextSelectionEnabled="False"
-                PointerPressed="txtTidyAddress_PointerPressed"
-                HorizontalAlignment="Stretch">               
-            </TextBlock>
+            <Grid Grid.Column="1" HorizontalAlignment="Center">                
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="Auto" />               
+                    </Grid.ColumnDefinitions>
+                    <ProgressRing  x:Name="myProgressRing" 
+                        Grid.Column="0"
+                        IsActive="True"
+                        Height="16" 
+                        Width="16"      
+                        Visibility="Collapsed"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent" />
+                    <TextBlock x:Name="txtTidyAddress"                                        
+                        Grid.Column="1"
+                        MinWidth="100"                      
+                        ToolTipService.ToolTip="Click or tap to copy full address"                        
+                        IsTextSelectionEnabled="False"
+                        PointerPressed="txtTidyAddress_PointerPressed"                        
+                        VerticalAlignment="Center"/>
+                    <TextBlock x:Name="txtFullAddress"              
+                        Grid.Column="1"                     
+                        Visibility="Collapsed"                     
+                        MinWidth="100"
+                        IsTextSelectionEnabled="True"
+                        LostFocus="txtFullAddress_LostFocus"                        
+                        VerticalAlignment="Center"/>                         
+            </Grid>
 
-            <TextBlock x:Name="txtFullAddress"
-                Grid.Column="1"
-                Visibility="Collapsed"
-                TextAlignment="Center"
-                MinWidth="100"
-                IsTextSelectionEnabled="True"
-                LostFocus="txtFullAddress_LostFocus"
-                HorizontalAlignment="Stretch"/>
-            
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="2">
                 <AppBarButton Icon="Setting" ToolTipService.ToolTip="Settings" Click="Settings_Click"/>
                 <AppBarButton Icon="Help" ToolTipService.ToolTip="About" Click="btnAbout_Click"/>

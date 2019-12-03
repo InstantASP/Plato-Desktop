@@ -126,6 +126,7 @@
     <Compile Include="DependencyInjection\ServiceLocator.cs" />
     <Compile Include="Extensions\CompatExtensions.cs" />
     <Compile Include="Services\IAppSettingsManager.cs" />
+    <Compile Include="ThemeAwareFrame.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
@@ -143,6 +144,27 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Backgrounds\1600x1200.jpg" />
+    <Content Include="Assets\Backgrounds\1680x1050.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1080 %281%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1080 %282%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1080 %283%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1080 %284%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1080 %285%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1080.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1200 %281%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1200 %282%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1200 %283%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1200 %284%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1200 %285%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1200 %286%29.jpg" />
+    <Content Include="Assets\Backgrounds\1920x1200.jpg" />
+    <Content Include="Assets\Backgrounds\2400x1500.jpg" />
+    <Content Include="Assets\Backgrounds\2560x1600 %281%29.jpg" />
+    <Content Include="Assets\Backgrounds\2560x1600 %282%29.jpg" />
+    <Content Include="Assets\Backgrounds\2560x1600 %283%29.jpg" />
+    <Content Include="Assets\Backgrounds\2560x1600 %284%29.jpg" />
+    <Content Include="Assets\Backgrounds\2560x1600.jpg" />
     <Content Include="Assets\Web\css\app\plato.css" />
     <Content Include="Assets\Web\css\app\themes\dark.css" />
     <Content Include="Assets\Web\css\app\themes\light.css" />
