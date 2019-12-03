@@ -1,0 +1,43 @@
+﻿html, body {
+    background-color: transparent !important;    
+}
+
+.nav-site {
+    border-bottom: 0;
+}
+
+.navbar.bg-dark {
+    background-color: transparent !important;
+  
+}
+
+.plato-body  {
+
+}
+
+.layout-header > .layout-header-content {    
+    background-position: top center;
+    background-attachment:fixed;
+}
+
+.layout-header {
+    position:relative;
+}
+
+.layout-header > .layout-header-content {
+    width: 100%;
+    top: 0;
+    left: 0;   
+    position: fixed;
+}
+
+.layout-header-bg {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;   
+    position: absolute;
+    background-position:top center;  
+    background-size:100%;
+    z-index: 1;
+}

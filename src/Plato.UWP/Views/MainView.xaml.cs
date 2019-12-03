@@ -22,11 +22,9 @@ namespace Plato.UWP.Views
         public MainViewModel ViewModel { get; }
 
         public MainView()
-        {
-      
+        {      
             ViewModel = ServiceLocator.Current.GetService<MainViewModel>();
             InitializeComponent();
-
         }
        
         #region "Page Events"
@@ -35,7 +33,6 @@ namespace Plato.UWP.Views
         {
 
             await ViewModel.LoadAsync();
-//            this.RequestedTheme = ViewModel.Theme;
             (Window.Current.Content as ThemeAwareFrame).AppTheme = ViewModel.Theme;
 
             if (!string.IsNullOrEmpty(ViewModel.BackgroundImage))
@@ -51,9 +48,9 @@ namespace Plato.UWP.Views
             webView1.NavigationStarting += WebView1_NavigationStarting;
             webView1.NavigationCompleted += webView1_NavigationCompleted;
             webView1.NavigationFailed += WebView1_NavigationFailed;
-
+            
             NavigateWithHeader(new Uri(ViewModel.Url));
-
+     
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -87,6 +84,8 @@ namespace Plato.UWP.Views
         {
 
             myProgressRing.IsActive = false;
+            initialLoader.Visibility = Visibility.Collapsed;
+
             Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 0);
 
             switch (args.WebErrorStatus)
@@ -101,8 +100,11 @@ namespace Plato.UWP.Views
 
             try
             {
-                var theme = this.RequestedTheme == ElementTheme.Dark ? "dark" : "light";
 
+                var currentTheme = (Window.Current.Content as ThemeAwareFrame).AppTheme;
+                var theme = currentTheme == ElementTheme.Dark ? "dark" : "light";
+
+                // Upon the first navigation set a client cookie to indicate the theme
                 if (_firstRequest)
                 {
                     await sender.InvokeScriptAsync("eval", new string[] {
@@ -110,12 +112,22 @@ namespace Plato.UWP.Views
                     });
                 }
 
+                // Inject theme overrides into Plato      
+                var bg = new Uri($"ms-appx-web:///{ViewModel.BackgroundImage}");
+                var css = new Uri($"ms-appx-web:///assets/web/css/plato/{theme}.css");
+                await sender.InvokeScriptAsync("eval", new string[] {
+                        $"if (window.$.Plato) {{ var bg = $('<div>', {{ 'class': 'layout-header-bg' }}).css({{ 'background-image': 'url({bg.ToString()})' }}); $('.layout-header-content').append(bg);  window.$.Plato.utils.addCss('{css.ToString()}'); }}"
+                    });
+
+                // Add theme css into local pages
                 await sender.InvokeScriptAsync("addCss", new string[] {
                             $"css/app/themes/{theme}.css"
                         });
                 await sender.InvokeScriptAsync("addUrl", new string[] {
                             ViewModel.Url
                         });
+           
+
             }
             catch
             {
@@ -209,10 +221,10 @@ namespace Plato.UWP.Views
         void NavigateWithHeader(Uri uri)
         {
             _firstRequest = true;
+            var currentTheme = (Window.Current.Content as ThemeAwareFrame).AppTheme;
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, uri);
-            requestMsg.Headers.Add("X-Plato-Theme", this.RequestedTheme == ElementTheme.Dark ? "dark" : "light");
+            requestMsg.Headers.Add("X-Plato-Theme", currentTheme == ElementTheme.Dark ? "dark" : "light");
             webView1.NavigateWithHttpRequestMessage(requestMsg);
-
         }
 
         string TidyUrl(string url)

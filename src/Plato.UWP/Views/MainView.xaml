@@ -11,7 +11,7 @@
     <Page.Resources>
         <Style x:Key="ThemeBackgroundBrush_WithOpacity" TargetType="Grid">
             <Setter Property="Background" Value="{ThemeResource MyTextColor}" />
-            <Setter Property="Opacity" Value=".8" />
+            <Setter Property="Opacity" Value=".1" />
         </Style>
     </Page.Resources>
     
@@ -55,9 +55,8 @@
     </FlyoutBase.AttachedFlyout>
        
     <Grid x:Name="main">
-        <Grid.Background>
-            <ImageBrush Stretch="Fill" ImageSource="Assets/Backgrounds/1600x1200.jpg"/>
-        </Grid.Background>
+        <Grid Background="{ThemeResource MyTextColor}">
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*" />
             <!--This will make any control in this column of grid take 2/5 of total width-->            
@@ -67,7 +66,7 @@
             <RowDefinition MinHeight="30" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" Grid.Row="0" Style="{StaticResource ThemeBackgroundBrush_WithOpacity}">
+        <Grid Grid.Column="0" Grid.Row="0">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
@@ -120,14 +119,17 @@
         <StackPanel Grid.Column="0" Grid.Row="1"  
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
-            <ProgressRing IsActive="True" Height="100" Width="100"/>             
+            <ProgressRing x:Name="initialLoader" IsActive="True" Height="100" Width="100"/>             
         </StackPanel>
         
         <WebView Grid.Column="0" Grid.Row="1"
-                 HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch"                     
-                     x:Name="webView1" 
-                 Source="https://plato.instantasp.co.uk/"/>     
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"                     
+                x:Name="webView1" 
+                 DefaultBackgroundColor="Transparent"
+                 Source="https://plato.instantasp.co.uk/"/>
+            
+        </Grid>
         
     </Grid>
 </Page>

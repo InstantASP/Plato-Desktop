@@ -10,10 +10,10 @@
                 <ResourceDictionary>
                     <ResourceDictionary.ThemeDictionaries>
                         <ResourceDictionary x:Key="Dark">
-                            <SolidColorBrush x:Key="MyTextColor" Color="Black" />
+                            <SolidColorBrush x:Key="MyTextColor" Color="Black" Opacity=".8" />
                         </ResourceDictionary>
                         <ResourceDictionary x:Key="Light">
-                            <SolidColorBrush x:Key="MyTextColor" Color="White" />
+                            <SolidColorBrush x:Key="MyTextColor" Color="White" Opacity=".8" />
                         </ResourceDictionary>
                     </ResourceDictionary.ThemeDictionaries>
                 </ResourceDictionary>

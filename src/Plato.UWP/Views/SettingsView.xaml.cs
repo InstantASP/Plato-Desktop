@@ -10,7 +10,6 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
-using Plato.UWP.Configuration;
 using Windows.Storage;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -33,7 +32,6 @@ namespace Plato.UWP.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await ViewModel.LoadAsync();
-            //this.RequestedTheme = ViewModel.Theme;
             (Window.Current.Content as ThemeAwareFrame).AppTheme = ViewModel.Theme;
 
             if (!string.IsNullOrEmpty(ViewModel.Url))
@@ -131,9 +129,10 @@ namespace Plato.UWP.Views
                         var bitmapImage = new BitmapImage();
                         var mystackPanel = new StackPanel();
                         mystackPanel.BorderBrush = new SolidColorBrush(Colors.Transparent);
-                        mystackPanel.BorderThickness = new Thickness(1);                  
+                        mystackPanel.BorderThickness = new Thickness(5);
+                        mystackPanel.Margin = new Thickness(5);
                         image.Name = filePath;
-                        image.Margin = new Thickness(10);
+                        image.Margin = new Thickness(1);
                         bitmapImage.SetSource(random);
                         image.Source = bitmapImage;                 
                         image.Stretch = Stretch.UniformToFill;               
