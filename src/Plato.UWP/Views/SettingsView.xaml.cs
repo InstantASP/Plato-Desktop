@@ -14,13 +14,15 @@ using Windows.Storage;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Plato.UWP.Views
 {
 
     public sealed partial class SettingsView : Page
     {
-        
+
         public SettingsViewModel ViewModel { get; }
 
         public SettingsView()
@@ -28,6 +30,8 @@ namespace Plato.UWP.Views
             ViewModel = ServiceLocator.Current.GetService<SettingsViewModel>();            
             InitializeComponent();
         }
+
+        #region "Page Events"
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -62,6 +66,10 @@ namespace Plato.UWP.Views
         {
             ViewModel.Unload();
         }
+
+        #endregion
+
+        #region "Button Events"
 
         void btnCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -111,46 +119,11 @@ namespace Plato.UWP.Views
 
         }
 
+        #endregion
 
-        async void LoadImages()
-        {
-        
-            var filePaths = await GetAssetFiles("Assets/Backgrounds");
-            if (filePaths != null)
-            {
+        #region "Image List Events"
 
-                if (filePaths != null)
-                {
-                    var i = 0;
-                    foreach (var filePath in filePaths)
-                    {
-                        var random = await Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(new Uri($"ms-appx:///{filePath}")).OpenReadAsync();
-                        var image = new Image();
-                        var bitmapImage = new BitmapImage();
-                        var mystackPanel = new StackPanel();
-                        mystackPanel.BorderBrush = new SolidColorBrush(Colors.Transparent);
-                        mystackPanel.BorderThickness = new Thickness(5);
-                        mystackPanel.Margin = new Thickness(5);
-                        image.Name = filePath;
-                        image.Margin = new Thickness(1);
-                        bitmapImage.SetSource(random);
-                        image.Source = bitmapImage;                 
-                        image.Stretch = Stretch.UniformToFill;               
-                        mystackPanel.Children.Add(image);
-                        image.PointerEntered += Image_PointerEntered;
-                        image.PointerExited += Image_PointerExited;
-                        pnlBackgrounds.Children.Add(mystackPanel);
-                        i++;
-                    }
-                }
-  
-            }
-
-            SetSelectedImage();
-
-        }
-
-        private void Image_PointerExited(object sender, PointerRoutedEventArgs e)
+        void Image_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             var image = sender as Image;
             var parent = VisualTreeHelper.GetParent(image) as StackPanel;
@@ -163,7 +136,7 @@ namespace Plato.UWP.Views
             image.Tapped -= Image_Tapped;
         }
 
-        private void Image_PointerEntered(object sender, PointerRoutedEventArgs e)
+        void Image_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             var image = sender as Image;            
             var parent = VisualTreeHelper.GetParent(image) as StackPanel;
@@ -186,6 +159,10 @@ namespace Plato.UWP.Views
             Frame.Navigate(typeof(SettingsView), e);
         }
 
+        #endregion
+
+        #region "Private Methods"
+
         void ClearSelectedImage()
         {         
             foreach (StackPanel stackPanel in pnlBackgrounds.Children)
@@ -193,7 +170,6 @@ namespace Plato.UWP.Views
                 stackPanel.BorderBrush = new SolidColorBrush(Colors.Transparent);
             }      
         }
-
 
         void SetSelectedImage()
         {
@@ -219,39 +195,82 @@ namespace Plato.UWP.Views
 
         }
 
-        string GetSelectedImageFileName()
+        async void LoadImages()
         {
-
-            var fileName = string.Empty;
-            foreach (StackPanel stackPanel in pnlBackgrounds.Children)
+            var filePaths = await GetAssetFiles("Assets/Backgrounds");
+            if (filePaths != null)
             {
-                if (stackPanel.BorderBrush != new SolidColorBrush(Colors.Transparent))
+                if (filePaths != null)
                 {
-                    var image = stackPanel.Children[0] as Image;
-                    if (image != null)
+                    var i = 0;
+                    foreach (var filePath in filePaths)
                     {
-                        return image.Name;                   
+                        var random = await Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(new Uri($"ms-appx:///{filePath}")).OpenReadAsync();
+                        var image = new Image();
+                        var bitmapImage = new BitmapImage();
+                        var mystackPanel = new StackPanel();
+                        mystackPanel.BorderBrush = new SolidColorBrush(Colors.Transparent);
+                        mystackPanel.BorderThickness = new Thickness(5);
+                        mystackPanel.Margin = new Thickness(5);
+                        image.Name = filePath;
+                        image.Margin = new Thickness(1);
+                        bitmapImage.SetSource(random);
+                        image.Source = bitmapImage;
+                        image.Stretch = Stretch.UniformToFill;
+                        mystackPanel.Children.Add(image);
+                        image.PointerEntered += Image_PointerEntered;
+                        image.PointerExited += Image_PointerExited;
+                        image.Loaded += new RoutedEventHandler(OnPhotoScrollerImageLoad);
+                        pnlBackgrounds.Children.Add(mystackPanel);
+                        i++;
                     }
                 }
             }
-            return fileName;
+            SetSelectedImage();
         }
 
-        static async Task<IEnumerable<string>> GetAssetFiles(string rootPath)
+        private void OnPhotoScrollerImageLoad(object sender, RoutedEventArgs e)
         {
 
-            var folderPath = System.IO.Path.Combine(
+            var storyboard = new Storyboard();
+            var doubleAnimation = new DoubleAnimation();
+            doubleAnimation.Duration = TimeSpan.FromMilliseconds(500);
+            doubleAnimation.EnableDependentAnimation = true;
+            doubleAnimation.From = 0;
+            doubleAnimation.To = 1;
+
+            Storyboard.SetTargetProperty(doubleAnimation, "Opacity");
+            Storyboard.SetTarget(doubleAnimation,   (DependencyObject) sender);
+            storyboard.Children.Add(doubleAnimation);
+            storyboard.Begin();
+        }
+
+        async Task<IEnumerable<string>> GetAssetFiles(string rootPath)
+        {
+
+            var folderPath = Path.Combine(
                 Windows.ApplicationModel.Package.Current.InstalledLocation.Path,
                 rootPath.Replace('/', '\\').TrimStart('\\')
             );
 
             var folder = await StorageFolder.GetFolderFromPathAsync(folderPath);
+            if (folder == null)
+            {
+                return null;
+            }
+
             var files = await folder.GetFilesAsync();
-            var relativePaths = from file in files select (rootPath + "/" + file.Name);
-            return relativePaths;
+            if (files != null)
+            {
+                var relativePaths = from file in files select (rootPath + "/" + file.Name);
+                return relativePaths;
+            }
+
+            return null;
 
         }
 
+        #endregion
 
     }
 

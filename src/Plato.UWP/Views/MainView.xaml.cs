@@ -1,7 +1,6 @@
 ﻿using Plato.UWP.DependencyInjection;
 using Plato.UWP.ViewModels;
 using System;
-using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -48,7 +47,7 @@ namespace Plato.UWP.Views
             webView1.NavigationStarting += WebView1_NavigationStarting;
             webView1.NavigationCompleted += webView1_NavigationCompleted;
             webView1.NavigationFailed += WebView1_NavigationFailed;
-            
+
             NavigateWithHeader(new Uri(ViewModel.Url));
      
         }
@@ -98,9 +97,9 @@ namespace Plato.UWP.Views
                     break;
             }
 
-            var theme = GetCurrentTheme();
+            var theme = (Window.Current.Content as ThemeAwareFrame).AppTheme;
             // Upon the first navigation set a client cookie to indicate the theme
-                if (_firstRequest)
+            if (_firstRequest)
             {
                 InsokeScript($"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}");
             }
@@ -228,41 +227,11 @@ namespace Plato.UWP.Views
             {
             }
         }
-
-        ElementTheme GetCurrentTheme()
-        {
-
-            var currentTheme = (Window.Current.Content as ThemeAwareFrame).AppTheme;
-            ElementTheme theme = ElementTheme.Default;
-
-            if (currentTheme == ElementTheme.Dark)
-            {
-                theme = ElementTheme.Dark;
-            }
-            else if (currentTheme == ElementTheme.Light)
-            {
-                theme = ElementTheme.Light;
-            }
-            else
-            {
-                var uiSettings = new Windows.UI.ViewManagement.UISettings();
-                Windows.UI.Color color = uiSettings.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background);
-                if (color.R == 0 && color.G == 0 && color.B == 0)
-                {
-                    theme = ElementTheme.Dark;
-                }
-                else
-                {
-                    theme = ElementTheme.Light;
-                }
-            }
-            return theme;
-        }
-
+        
         void NavigateWithHeader(Uri uri)
         {
             _firstRequest = true;
-            var theme = GetCurrentTheme();
+            var theme = (Window.Current.Content as ThemeAwareFrame).AppTheme;
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, uri);
             requestMsg.Headers.Add("X-Plato-Theme", theme == ElementTheme.Dark ? "dark" : "light");
             webView1.NavigateWithHttpRequestMessage(requestMsg);

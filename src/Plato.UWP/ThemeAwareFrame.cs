@@ -9,6 +9,7 @@ namespace Plato.UWP
 
     public class ThemeAwareFrame : Frame
     {
+
         private static readonly ThemeProxyClass _themeProxyClass = new ThemeProxyClass();
 
         public static readonly DependencyProperty AppThemeProperty = DependencyProperty.Register(
@@ -16,8 +17,21 @@ namespace Plato.UWP
         
         public ElementTheme AppTheme
         {
-            get { return (ElementTheme)GetValue(AppThemeProperty); }
-            set { SetValue(AppThemeProperty, value); }
+            get
+            {
+                var theme = (ElementTheme)GetValue(AppThemeProperty);
+                if (theme == ElementTheme.Default)
+                {
+                    // If "Default" detect underlying OS theme
+                    var uiSettings = new Windows.UI.ViewManagement.UISettings();
+                    Windows.UI.Color color = uiSettings.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background);
+                    return color.R == 0 && color.G == 0 && color.B == 0
+                        ? ElementTheme.Dark
+                        : ElementTheme.Light;                   
+                }
+                return theme;
+            }
+            set => SetValue(AppThemeProperty, value);
         }
 
         public ThemeAwareFrame(ElementTheme appTheme)
@@ -27,6 +41,7 @@ namespace Plato.UWP
             AppTheme = appTheme;
 
         }
+
         sealed class ThemeProxyClass : INotifyPropertyChanged
         {
             private ElementTheme _theme;
@@ -49,5 +64,7 @@ namespace Plato.UWP
                 if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
     }
+
 }
