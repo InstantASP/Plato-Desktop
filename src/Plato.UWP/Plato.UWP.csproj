@@ -144,38 +144,37 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Backgrounds\51947.jpg" />
-    <Content Include="Assets\Backgrounds\51958.jpg" />
-    <Content Include="Assets\Backgrounds\51962.jpg" />
-    <Content Include="Assets\Backgrounds\51967.jpg" />
-    <Content Include="Assets\Backgrounds\51973.jpg" />
-    <Content Include="Assets\Backgrounds\51987.jpg" />
-    <Content Include="Assets\Backgrounds\52041.jpg" />
-    <Content Include="Assets\Backgrounds\52054.jpg" />
-    <Content Include="Assets\Backgrounds\52056.jpg" />
-    <Content Include="Assets\Backgrounds\52064.jpg" />
-    <Content Include="Assets\Backgrounds\52086.jpg" />
-    <Content Include="Assets\Backgrounds\52114.jpg" />
-    <Content Include="Assets\Backgrounds\52169.jpg" />
-    <Content Include="Assets\Backgrounds\52175.jpg" />
-    <Content Include="Assets\Backgrounds\52223.jpg" />
-    <Content Include="Assets\Backgrounds\52289.jpg" />
-    <Content Include="Assets\Backgrounds\52319.jpg" />
-    <Content Include="Assets\Backgrounds\52359.jpg" />
-    <Content Include="Assets\Backgrounds\52382.jpg" />
-    <Content Include="Assets\Web\css\app\plato.css" />
-    <Content Include="Assets\Web\css\app\themes\dark.css" />
-    <Content Include="Assets\Web\css\app\themes\light.css" />
-    <Content Include="Assets\Web\css\plato\dark.css" />
-    <Content Include="Assets\Web\css\plato\light.css" />
-    <Content Include="Assets\Web\css\vendors\bootstrap.css" />
-    <Content Include="Assets\Web\images\error.png" />
-    <Content Include="Assets\Web\NotFound.html" />
+    <Content Include="Assets\Backgrounds\1.jpg" />
+    <Content Include="Assets\Backgrounds\10.jpg" />
+    <Content Include="Assets\Backgrounds\11.jpg" />
+    <Content Include="Assets\Backgrounds\12.jpg" />
+    <Content Include="Assets\Backgrounds\13.jpg" />
+    <Content Include="Assets\Backgrounds\14.jpg" />
+    <Content Include="Assets\Backgrounds\15.jpg" />
+    <Content Include="Assets\Backgrounds\16.jpg" />
+    <Content Include="Assets\Backgrounds\17.jpg" />
+    <Content Include="Assets\Backgrounds\18.jpg" />
+    <Content Include="Assets\Backgrounds\19.jpg" />
+    <Content Include="Assets\Backgrounds\2.jpg" />
+    <Content Include="Assets\Backgrounds\20.jpg" />
+    <Content Include="Assets\Backgrounds\21.jpg" />
+    <Content Include="Assets\Backgrounds\22.jpg" />
+    <Content Include="Assets\Backgrounds\23.jpg" />
+    <Content Include="Assets\Backgrounds\24.jpg" />
+    <Content Include="Assets\Backgrounds\3.jpg" />
+    <Content Include="Assets\Backgrounds\4.jpg" />
+    <Content Include="Assets\Backgrounds\5.jpg" />
+    <Content Include="Assets\Backgrounds\6.jpg" />
+    <Content Include="Assets\Backgrounds\7.jpg" />
+    <Content Include="Assets\Backgrounds\8.jpg" />
+    <Content Include="Assets\Backgrounds\9.jpg" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\settings.json" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-125.png" />
     <Content Include="Assets\SmallTile.scale-150.png" />
@@ -184,10 +183,12 @@
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-125.png" />
     <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-400.png" />
     <Content Include="Assets\Square150x150Logo.scale-100.png" />
     <Content Include="Assets\Square150x150Logo.scale-125.png" />
     <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-400.png" />
     <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
     <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
@@ -201,29 +202,35 @@
     <Content Include="Assets\Square44x44Logo.scale-100.png" />
     <Content Include="Assets\Square44x44Logo.scale-125.png" />
     <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-400.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\StoreLogo.backup.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-125.png" />
     <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Web\css\app\plato.css" />
+    <Content Include="Assets\Web\css\app\themes\dark.css" />
+    <Content Include="Assets\Web\css\app\themes\light.css" />
+    <Content Include="Assets\Web\css\plato\dark.css" />
+    <Content Include="Assets\Web\css\plato\light.css" />
+    <Content Include="Assets\Web\css\vendors\bootstrap.css" />
+    <Content Include="Assets\Web\images\error.png" />
     <Content Include="Assets\Web\js\app\plato.js" />
+    <Content Include="Assets\Web\NotFound.html" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -249,9 +256,6 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\settings.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

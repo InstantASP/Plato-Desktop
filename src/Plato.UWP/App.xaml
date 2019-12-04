@@ -10,11 +10,27 @@
                 <ResourceDictionary>
                     <ResourceDictionary.ThemeDictionaries>
                         <ResourceDictionary x:Key="Dark">
-                            <SolidColorBrush x:Key="MyTextColor" Color="Black" Opacity=".8" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity10" Color="Black" Opacity=".1" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity20" Color="Black" Opacity=".2" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity30" Color="Black" Opacity=".3" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity40" Color="Black" Opacity=".4" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity50" Color="Black" Opacity=".5" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity60" Color="Black" Opacity=".6" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity70" Color="Black" Opacity=".7" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity80" Color="Black" Opacity=".8" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity90" Color="Black" Opacity=".9" />
                         </ResourceDictionary>
                         <ResourceDictionary x:Key="Light">
-                            <SolidColorBrush x:Key="MyTextColor" Color="White" Opacity=".8" />
-                        </ResourceDictionary>
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity10" Color="White" Opacity=".1" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity20" Color="White" Opacity=".2" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity30" Color="White" Opacity=".3" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity40" Color="White" Opacity=".4" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity50" Color="White" Opacity=".5" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity60" Color="White" Opacity=".6" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity70" Color="White" Opacity=".7" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity80" Color="White" Opacity=".8" />
+                            <SolidColorBrush x:Key="PlatoBgColorBrushOpacity90" Color="White" Opacity=".9" />
+                        </ResourceDictionary>                    
                     </ResourceDictionary.ThemeDictionaries>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>

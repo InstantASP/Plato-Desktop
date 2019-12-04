@@ -79,8 +79,8 @@ namespace Plato.UWP.Views
             myProgressRing.IsActive = true;
 
         }
-        
-        private async void webView1_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+
+        private void webView1_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
 
             myProgressRing.IsActive = false;
@@ -89,8 +89,8 @@ namespace Plato.UWP.Views
             Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 0);
 
             switch (args.WebErrorStatus)
-            {          
-                case Windows.Web.WebErrorStatus.NotFound:                    
+            {
+                case Windows.Web.WebErrorStatus.NotFound:
                     webView1.Navigate(new Uri("ms-appx-web:///assets/web/NotFound.html"));
                     break;
                 default:
@@ -98,41 +98,36 @@ namespace Plato.UWP.Views
                     break;
             }
 
-            try
-            {
-
-                var currentTheme = (Window.Current.Content as ThemeAwareFrame).AppTheme;
-                var theme = currentTheme == ElementTheme.Dark ? "dark" : "light";
-
-                // Upon the first navigation set a client cookie to indicate the theme
+            var theme = GetCurrentTheme();
+            // Upon the first navigation set a client cookie to indicate the theme
                 if (_firstRequest)
-                {
-                    await sender.InvokeScriptAsync("eval", new string[] {
-                        $"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}"
-                    });
-                }
-
-                // Inject theme overrides into Plato      
-                var bg = new Uri($"ms-appx-web:///{ViewModel.BackgroundImage}");
-                var css = new Uri($"ms-appx-web:///assets/web/css/plato/{theme}.css");
-                await sender.InvokeScriptAsync("eval", new string[] {
-                        $"if (window.$.Plato) {{ var bg = $('<div>', {{ 'class': 'layout-header-bg' }}).css({{ 'background-image': 'url({bg.ToString()})' }}); $('.layout-header-content').append(bg);  window.$.Plato.utils.addCss('{css.ToString()}'); }}"
-                    });
-
-                // Add theme css into local pages
-                await sender.InvokeScriptAsync("addCss", new string[] {
-                            $"css/app/themes/{theme}.css"
-                        });
-                await sender.InvokeScriptAsync("addUrl", new string[] {
-                            ViewModel.Url
-                        });
-           
-
-            }
-            catch
             {
+                InsokeScript($"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}");
             }
+              
+            var script = @"
+                // Wrapped fixed content within a dummy div to prevent stickyness
+                if (window.$.Plato) {     
+                    var dummy = $('<div>', {
+                        'class': 'd-block'
+                    });                    
 
+                    $('.layout-header-content').wrap(dummy);
+                    $('.layout-sidebar-content').wrap(dummy);
+                    $('.layout-asides-content').wrap(dummy);
+
+                    // Add custom CSS
+                    window.$.Plato.utils.addCss('{css}'); 
+                }
+            ";
+            script = script.Replace("{css}", new Uri($"ms-appx-web:///assets/web/css/plato/{theme}.css").ToString());            
+            InsokeScript(script);
+
+            // Add theme css into local pages
+            InsokeScript("addCss", new string[] { $"css/app/themes/{theme}.css" });
+
+
+            InsokeScript("addUrl", new string[] { ViewModel.Url });
 
             var url = string.Empty;
             var tidyUrl = string.Empty;
@@ -142,7 +137,7 @@ namespace Plato.UWP.Views
                 tidyUrl = TidyUrl(url);
             }
             finally
-            {   
+            {
                 txtFullAddress.Text = url;
                 txtTidyAddress.Text = tidyUrl;
             }
@@ -218,12 +213,58 @@ namespace Plato.UWP.Views
 
         #region "Private Methods"               
 
+        void InsokeScript(string  script)
+        {
+            InsokeScript("eval", new string[] { script } );
+        }
+
+        async void InsokeScript(string functionName, string[] args)
+        {
+            try
+            {
+                await webView1.InvokeScriptAsync(functionName, args);       
+            }
+            catch
+            {
+            }
+        }
+
+        ElementTheme GetCurrentTheme()
+        {
+
+            var currentTheme = (Window.Current.Content as ThemeAwareFrame).AppTheme;
+            ElementTheme theme = ElementTheme.Default;
+
+            if (currentTheme == ElementTheme.Dark)
+            {
+                theme = ElementTheme.Dark;
+            }
+            else if (currentTheme == ElementTheme.Light)
+            {
+                theme = ElementTheme.Light;
+            }
+            else
+            {
+                var uiSettings = new Windows.UI.ViewManagement.UISettings();
+                Windows.UI.Color color = uiSettings.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background);
+                if (color.R == 0 && color.G == 0 && color.B == 0)
+                {
+                    theme = ElementTheme.Dark;
+                }
+                else
+                {
+                    theme = ElementTheme.Light;
+                }
+            }
+            return theme;
+        }
+
         void NavigateWithHeader(Uri uri)
         {
             _firstRequest = true;
-            var currentTheme = (Window.Current.Content as ThemeAwareFrame).AppTheme;
+            var theme = GetCurrentTheme();
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, uri);
-            requestMsg.Headers.Add("X-Plato-Theme", currentTheme == ElementTheme.Dark ? "dark" : "light");
+            requestMsg.Headers.Add("X-Plato-Theme", theme == ElementTheme.Dark ? "dark" : "light");
             webView1.NavigateWithHttpRequestMessage(requestMsg);
         }
 

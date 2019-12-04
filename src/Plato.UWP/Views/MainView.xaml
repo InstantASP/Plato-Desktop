@@ -8,13 +8,6 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Page.Resources>
-        <Style x:Key="ThemeBackgroundBrush_WithOpacity" TargetType="Grid">
-            <Setter Property="Background" Value="{ThemeResource MyTextColor}" />
-            <Setter Property="Opacity" Value=".1" />
-        </Style>
-    </Page.Resources>
-    
     <FlyoutBase.AttachedFlyout>
         <Flyout Placement="Full">
             <Grid Width="400">
@@ -55,7 +48,7 @@
     </FlyoutBase.AttachedFlyout>
        
     <Grid x:Name="main">
-        <Grid Background="{ThemeResource MyTextColor}">
+        <Grid Background="{ThemeResource PlatoBgColorBrushOpacity80}">
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*" />

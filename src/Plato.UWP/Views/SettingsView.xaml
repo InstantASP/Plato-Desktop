@@ -11,7 +11,7 @@
     <Grid x:Name="main">
         <Grid Width="Auto"
               Height="Auto"         
-              Background="{ThemeResource MyTextColor}">
+              Background="{ThemeResource PlatoBgColorBrushOpacity80}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10*" />
             </Grid.ColumnDefinitions>
