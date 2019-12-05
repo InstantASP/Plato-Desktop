@@ -1,9 +1,11 @@
 ﻿using Plato.UWP.DependencyInjection;
+using Plato.UWP.Models;
 using Plato.UWP.Services;
 using Plato.UWP.Views;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -41,7 +43,7 @@ namespace Plato.UWP
             {
 
                 // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new ThemeAwareFrame(ElementTheme.Dark); ;
+                rootFrame = new ThemeAwareFrame(ElementTheme.Default); ;
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -60,6 +62,7 @@ namespace Plato.UWP
 
             if (e.PrelaunchActivated == false)
             {
+
                 if (rootFrame.Content == null)
                 {
                     // When the navigation stack isn't restored navigate to the first page,
@@ -67,6 +70,7 @@ namespace Plato.UWP
                     // parameter
                     rootFrame.Navigate(typeof(MainView), e.Arguments);
                 }
+
                 // Ensure the current window is active
                 Window.Current.Activate();
 
@@ -101,8 +105,27 @@ namespace Plato.UWP
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
+            SaveStateAsync();
             deferral.Complete();
+
         }
+
+        async void SaveStateAsync()
+        {
+            var roamingSettings = ApplicationData.Current.RoamingSettings;
+            if (roamingSettings.Values.ContainsKey(nameof(AppSettings.PreviousUrl)))
+            {
+                var value = roamingSettings.Values[nameof(AppSettings.PreviousUrl)].ToString();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    var settingsManager = ServiceLocator.Current.GetService<IAppSettingsManager>();
+                    var settings = await settingsManager.GetSettings() ?? new AppSettings();
+                    settings.PreviousUrl = value;
+                    await settingsManager.SaveSettings(settings);
+                }
+            }
+        }
+
     }
+
 }

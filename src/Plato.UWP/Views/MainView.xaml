@@ -48,7 +48,7 @@
     </FlyoutBase.AttachedFlyout>
        
     <Grid x:Name="main">
-        <Grid Background="{ThemeResource PlatoBgColorBrushOpacity80}">
+        <Grid Background="{ThemeResource PlatoBgColorBrushOpacity70}">
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*" />
@@ -78,7 +78,7 @@
                         <ColumnDefinition Width="20" />
                         <ColumnDefinition Width="Auto" />               
                     </Grid.ColumnDefinitions>
-                    <ProgressRing  x:Name="myProgressRing" 
+                    <ProgressRing  x:Name="loading" 
                         Grid.Column="0"
                         IsActive="True"
                         Height="16" 

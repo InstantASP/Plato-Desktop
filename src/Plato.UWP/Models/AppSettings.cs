@@ -10,6 +10,8 @@
 
         public string BackgroundImage { get; set; }
 
+        public string PreviousUrl { get; set; }
+
     }
 
 }

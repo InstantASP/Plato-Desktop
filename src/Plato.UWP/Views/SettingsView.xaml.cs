@@ -47,18 +47,18 @@ namespace Plato.UWP.Views
             {
                 ddlTheme.SelectedItem = ViewModel.Theme.ToString();
             }
-            
-            LoadImages();
 
             if (!string.IsNullOrEmpty(ViewModel.BackgroundImage))
             {
-                var bitmap = new BitmapImage(new Uri($"ms-appx-web:///{ViewModel.BackgroundImage}"));
+                var bitmap = new BitmapImage(new Uri($"ms-appx-web:///{ViewModel.BackgroundImage}"));                
                 main.Background = new ImageBrush
                 {
                     ImageSource = bitmap,
                     Stretch = Stretch.Fill
-                };
+                };                
             }
+
+            LoadImages();
 
         }
 
@@ -180,7 +180,7 @@ namespace Plato.UWP.Views
             {
                 return;
             }
-        
+
             foreach (StackPanel stackPanel in pnlBackgrounds.Children)
             {
                 var image = stackPanel.Children[0] as Image;
@@ -195,15 +195,22 @@ namespace Plato.UWP.Views
 
         }
 
+
+        private static IEnumerable<string> _files = null;
+
         async void LoadImages()
         {
-            var filePaths = await GetAssetFiles("Assets/Backgrounds");
-            if (filePaths != null)
+            if (_files == null)
             {
-                if (filePaths != null)
+                _files = await GetAssetFiles("Assets/Backgrounds");
+            }
+            
+            if (_files != null)
+            {
+                if (_files != null)
                 {
                     var i = 0;
-                    foreach (var filePath in filePaths)
+                    foreach (var filePath in _files)
                     {
                         var random = await Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(new Uri($"ms-appx:///{filePath}")).OpenReadAsync();
                         var image = new Image();
@@ -216,11 +223,12 @@ namespace Plato.UWP.Views
                         image.Margin = new Thickness(1);
                         bitmapImage.SetSource(random);
                         image.Source = bitmapImage;
+                        image.Opacity = 0;
                         image.Stretch = Stretch.UniformToFill;
                         mystackPanel.Children.Add(image);
                         image.PointerEntered += Image_PointerEntered;
                         image.PointerExited += Image_PointerExited;
-                        image.Loaded += new RoutedEventHandler(OnPhotoScrollerImageLoad);
+                        image.Loaded += new RoutedEventHandler(OnImageLoad);
                         pnlBackgrounds.Children.Add(mystackPanel);
                         i++;
                     }
@@ -229,7 +237,7 @@ namespace Plato.UWP.Views
             SetSelectedImage();
         }
 
-        private void OnPhotoScrollerImageLoad(object sender, RoutedEventArgs e)
+        private void OnImageLoad(object sender, RoutedEventArgs e)
         {
 
             var storyboard = new Storyboard();
@@ -261,9 +269,8 @@ namespace Plato.UWP.Views
 
             var files = await folder.GetFilesAsync();
             if (files != null)
-            {
-                var relativePaths = from file in files select (rootPath + "/" + file.Name);
-                return relativePaths;
+            {               
+                return from file in files select (rootPath + "/" + file.Name); ;
             }
 
             return null;

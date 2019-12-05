@@ -40,10 +40,17 @@ namespace Plato.UWP.ViewModels
 
                 var settings = await _settingsManager.GetSettings();
 
-                if (!string.IsNullOrEmpty(settings.Url))
+                if (!string.IsNullOrEmpty(settings.PreviousUrl))
                 {
-                    Url = settings.Url;
+                    Url = settings.PreviousUrl;
                 }
+                else
+                {
+                    if (!string.IsNullOrEmpty(settings.Url))
+                    {
+                        Url = settings.Url;
+                    }
+                }                    
 
                 if (!string.IsNullOrEmpty(settings.BackgroundImage))
                 {

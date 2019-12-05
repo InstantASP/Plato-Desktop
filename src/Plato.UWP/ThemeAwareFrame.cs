@@ -36,10 +36,13 @@ namespace Plato.UWP
 
         public ThemeAwareFrame(ElementTheme appTheme)
         {
-            var themeBinding = new Binding { Source = _themeProxyClass, Path = new PropertyPath("Theme"), Mode = BindingMode.OneWay };
+            var themeBinding = new Binding { 
+                Source = _themeProxyClass, 
+                Path = new PropertyPath("Theme"), 
+                Mode = BindingMode.OneWay 
+            };
             SetBinding(RequestedThemeProperty, themeBinding);
             AppTheme = appTheme;
-
         }
 
         sealed class ThemeProxyClass : INotifyPropertyChanged
