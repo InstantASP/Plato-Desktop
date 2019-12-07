@@ -1,8 +1,4 @@
-﻿using Plato.UWP.DependencyInjection;
-using Plato.UWP.Models;
-using Plato.UWP.Services;
-using Plato.UWP.ViewModels;
-using System;
+﻿using System;
 using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -10,10 +6,13 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
+using Plato.UWP.DependencyInjection;
+using Plato.UWP.Models;
+using Plato.UWP.Services;
+using Plato.UWP.ViewModels;
 
 namespace Plato.UWP.Views
 {
@@ -21,16 +20,16 @@ namespace Plato.UWP.Views
     public sealed partial class MainView : Page
     {
 
-        bool _firstRequest = true;     
+        bool _firstRequest = true;
 
         public MainViewModel ViewModel { get; }
 
         public MainView()
-        {      
+        {
             ViewModel = ServiceLocator.Current.GetService<MainViewModel>();
             InitializeComponent();
         }
-       
+
         #region "Page Events"
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -47,7 +46,7 @@ namespace Plato.UWP.Views
             if (!string.IsNullOrEmpty(ViewModel.BackgroundImage))
             {
                 var bitmap = new BitmapImage(new Uri($"ms-appx-web:///{ViewModel.BackgroundImage}"));
-                main.Background = new ImageBrush
+                Main.Background = new ImageBrush
                 {
                     ImageSource = bitmap,
                     Stretch = Stretch.Fill
@@ -55,19 +54,19 @@ namespace Plato.UWP.Views
             }
 
             // Wire up web view events
-            webView1.NavigationStarting += WebView1_NavigationStarting;
-            webView1.NavigationCompleted += webView1_NavigationCompleted;
-            webView1.NavigationFailed += WebView1_NavigationFailed;
-            webView1.ScriptNotify += WebView1_ScriptNotify;
+            WebView.NavigationStarting += WebView_NavigationStarting;
+            WebView.NavigationCompleted += WebView_NavigationCompleted;
+            WebView.NavigationFailed += WebView_NavigationFailed;
+            WebView.ScriptNotify += WebView_ScriptNotify;
 
-            // Perform the first reuqest navigating with headers to indicate the theme
+            // Perform the first request navigating with headers to indicate the theme
             NavigateWithHeader(new Uri(ViewModel.Url));
 
         }
 
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {          
+        {
             ViewModel.Unload();
         }
 
@@ -75,35 +74,30 @@ namespace Plato.UWP.Views
 
         #region "webView Events"
 
-        private void WebView1_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
 
-            if (IsLocalUrl(args.Uri.ToString()))
-            {                
-                txtTidyAddress.Visibility = Visibility.Collapsed;
-            } 
-            else
-            {                
-                txtTidyAddress.Visibility = Visibility.Visible;
-            }
+            TidyAddress.Visibility = IsLocalUrl(args.Uri.ToString()) 
+                ? Visibility.Collapsed 
+                : Visibility.Visible;
 
             // Update cursor
             SetCursor(Windows.UI.Core.CoreCursorType.Wait);
 
             // Activate loader
-            loading.IsActive = true;          
+            Loader.IsActive = true;
 
         }
 
-        private void webView1_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
 
             // Hide the initial loader
-            initialLoader.Visibility = Visibility.Collapsed;
+            InitialLoader.Visibility = Visibility.Collapsed;
 
             // Show the loader we will be using going forward
-            loading.Visibility = Visibility.Visible;
-            loading.IsActive = false;
+            Loader.Visibility = Visibility.Visible;
+            Loader.IsActive = false;
 
             // Reset the cursor
             SetCursor(Windows.UI.Core.CoreCursorType.Arrow);
@@ -115,13 +109,13 @@ namespace Plato.UWP.Views
             {
                 roamingSettings.Values[nameof(AppSettings.PreviousUrl)] = sender.Source.ToString();
             }
-            
+
             // Handle not found 
             switch (args.WebErrorStatus)
             {
                 case Windows.Web.WebErrorStatus.NotFound:
-                    webView1.Navigate(new Uri("ms-appx-web:///assets/web/NotFound.html"));
-                    break;             
+                    WebView.Navigate(new Uri("ms-appx-web:///assets/web/NotFound.html"));
+                    break;
             }
 
             // Inject client script into web view
@@ -130,19 +124,18 @@ namespace Plato.UWP.Views
             // Update address bar
             UpdateAddressBa(args.Uri);
 
-            // Indicate this is no londer the first request
+            // Indicate this is no longer the first request
             _firstRequest = false;
 
         }
 
-        private void WebView1_NavigationFailed(object sender, WebViewNavigationFailedEventArgs e)
+        private void WebView_NavigationFailed(object sender, WebViewNavigationFailedEventArgs e)
         {
             SetCursor(Windows.UI.Core.CoreCursorType.Arrow);
         }
 
-        private async void WebView1_ScriptNotify(object sender, NotifyEventArgs e)
+        private async void WebView_ScriptNotify(object sender, NotifyEventArgs e)
         {
-
 
             var messageArray = e.Value.Split(':');
             string message, type;
@@ -161,11 +154,11 @@ namespace Plato.UWP.Views
             if (type.Equals("typeConfirm"))
             {
                 dialog.Commands.Add(new UICommand(
-                 "Yes",
-                 new UICommandInvokedHandler(this.CommandInvokedHandler)));
+                    "Yes",
+                    new UICommandInvokedHandler(this.CommandInvokedHandler)));
                 dialog.Commands.Add(new UICommand(
-                "Cancel",
-               new UICommandInvokedHandler(this.CommandInvokedHandler)));
+                    "Cancel",
+                    new UICommandInvokedHandler(this.CommandInvokedHandler)));
                 dialog.DefaultCommandIndex = 0;
                 dialog.CancelCommandIndex = 1;
             }
@@ -173,6 +166,7 @@ namespace Plato.UWP.Views
             {
                 //Debug.WriteLine("type=" + type + " ,message=" + message);
             }
+
             var result = await dialog.ShowAsync();
 
         }
@@ -193,33 +187,28 @@ namespace Plato.UWP.Views
 
         #region "Button events"
 
-        void btnHome_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
-            webView1.Navigate(new Uri(ViewModel.Url));
-        }
-
-        void btnBack_Click(object sender, RoutedEventArgs e)
-        {         
-            if (webView1.CanGoBack)
+            if (WebView.CanGoBack)
             {
-                webView1.GoBack();
-            }            
-        }
-
-        void btnForward_Click(object sender, RoutedEventArgs e)
-        {
-            if (webView1.CanGoForward)
-            {
-                webView1.GoForward();
+                WebView.GoBack();
             }
         }
 
-        void btnRefresh_Click(object sender, RoutedEventArgs e)
-        {        
-            webView1.Refresh();
+        void Forward_Click(object sender, RoutedEventArgs e)
+        {
+            if (WebView.CanGoForward)
+            {
+                WebView.GoForward();
+            }
         }
 
-        async void Settings_Click(object sender, RoutedEventArgs e)
+        void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            WebView.Refresh();
+        }
+
+        private async void Settings_Click(object sender, RoutedEventArgs e)
         {
 
             // Save current url before navigating to settings
@@ -249,24 +238,24 @@ namespace Plato.UWP.Views
 
         #region "Address Bar Events"
 
-        private void txtTidyAddress_PointerPressed(object sender, PointerRoutedEventArgs e)
+        private void TidyAddress_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            txtFullAddress.Visibility = Visibility.Visible;
-            txtFullAddress.Select(txtFullAddress.ContentStart, txtFullAddress.ContentEnd);
-            txtFullAddress.Focus(FocusState.Programmatic);            
+            FullAddress.Visibility = Visibility.Visible;
+            FullAddress.Select(FullAddress.ContentStart, FullAddress.ContentEnd);
+            FullAddress.Focus(FocusState.Programmatic);
         }
 
-        private void txtFullAddress_LostFocus(object sender, RoutedEventArgs e)
+        private void FullAddress_LostFocus(object sender, RoutedEventArgs e)
         {
-            txtFullAddress.Visibility = Visibility.Collapsed;
-            txtTidyAddress.Visibility = Visibility.Visible;
+            FullAddress.Visibility = Visibility.Collapsed;
+            TidyAddress.Visibility = Visibility.Visible;
         }
 
         #endregion
 
         #region "Private Methods"               
 
-        void UpdateAddressBa(Uri uri)
+        private void UpdateAddressBa(Uri uri)
         {
 
             // Update the address
@@ -279,13 +268,13 @@ namespace Plato.UWP.Views
             }
             finally
             {
-                txtFullAddress.Text = url;
-                txtTidyAddress.Text = tidyUrl;
+                FullAddress.Text = url;
+                TidyAddress.Text = tidyUrl;
             }
 
         }
 
-        void InjectClientScripts(Uri uri)
+        private void InjectClientScripts(Uri uri)
         {
             var frame = GetFrame();
             var theme = frame.AppTheme;
@@ -293,80 +282,89 @@ namespace Plato.UWP.Views
             // Add theme css into local pages
             if (IsLocalUrl(uri))
             {
-                InsokeScript("addCss", new string[] { $"css/app/themes/{theme}.css" });
-                InsokeScript("addUrl", new string[] { ViewModel.Url });
+                InvokeScript("addCss", new string[] {$"css/app/themes/{theme}.css"});
+                InvokeScript("addUrl", new string[] {ViewModel.Url});
                 return;
             }
 
-            // Upon the first request set a client cookie to indicate
-            // the plato theme that will be used going forward
+            // Upon the first request set a client side cookie to indicate
+            // the plato theme that will be used for further requests
             if (_firstRequest)
             {
-                InsokeScript($"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}");
+                InvokeScript($"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}");
             }
 
+            /* window.external.notify usage below reuqires the app to be listed 
+             * within the packages manifest file as shown below...
+                <uap:ApplicationContentUriRules>
+                    <uap:Rule Type="include" Match="http://localhost:50440/" WindowsRuntimeAccess="none"/>        
+                </uap:ApplicationContentUriRules>
+            */
             var script = @"                
+
+                // Replace native functions that are not supported by UWP web view
+                window.alert = function(msg) { window.external.notify('typeAlert:' + msg); }
+                window.confirm = function() { return true } // window.confirm is not supported in webview for UWP
+                
                 if (window.$.Plato) {    
-
-                    // Add alert & confirm support
-                    window.alert = function(msg) { window.external.notify('typeAlert:' + msg) }
-                    window.confirm = function() { return true; } // window.confirm is not supported in UWP, always return true
-
+                    
                     // Wrapped fixed content within a dummy div to prevent stickyness
                     $('.layout-header-content').wrap($('<div>'));
                     $('.layout-sidebar-content').wrap($('<div>'));
                     $('.layout-asides-content').wrap($('<div>'));
                     // Add custom CSS
                     window.$.Plato.utils.addCss('{css}'); 
+
                 }                
             ";
             script = script.Replace("{css}", new Uri($"ms-appx-web:///assets/web/css/plato/{theme}.css").ToString());
-            InsokeScript(script);
+            InvokeScript(script);
 
         }
 
-        ThemeAwareFrame GetFrame()
+        private ThemeAwareFrame GetFrame()
         {
-            var frame = (Window.Current.Content as ThemeAwareFrame);
-            if (frame != null)
+            if (Window.Current.Content is ThemeAwareFrame frame)
             {
                 return frame;
             }
+
             throw new Exception("Could not cast the frame to type ThemeAwareFrame");
         }
 
-        void SetCursor(Windows.UI.Core.CoreCursorType cursorType)
-        {            
+        private void SetCursor(Windows.UI.Core.CoreCursorType cursorType)
+        {
             Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(cursorType, 0);
         }
 
-        void InsokeScript(string  script)
+        private void InvokeScript(string script)
         {
-            InsokeScript("eval", new string[] { script } );
+            InvokeScript("eval", new string[] {script});
         }
 
-        async void InsokeScript(string functionName, string[] args)
+        private async void InvokeScript(string functionName, string[] args)
         {
             try
             {
-                await webView1.InvokeScriptAsync(functionName, args);       
+                await WebView.InvokeScriptAsync(functionName, args);
             }
             catch
             {
+                // ignored
             }
         }
-        
-        void NavigateWithHeader(Uri uri)
+
+        private void NavigateWithHeader(Uri uri)
         {
             _firstRequest = true;
             var frame = GetFrame();
             var theme = frame.AppTheme;
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, uri);
             requestMsg.Headers.Add("X-Plato-Theme", theme == ElementTheme.Dark ? "dark" : "light");
-            webView1.NavigateWithHttpRequestMessage(requestMsg);
+            WebView.NavigateWithHttpRequestMessage(requestMsg);
         }
 
-        string TidyUrl(string url)
+        private string TidyUrl(string url)
         {
 
             if (url == null)
@@ -388,21 +386,23 @@ namespace Plato.UWP.Views
 
         }
 
-        bool IsLocalUrl(Uri uri)
+        private bool IsLocalUrl(Uri uri)
         {
             try
             {
                 return IsLocalUrl(uri.ToString());
-            } catch
-            {
-
             }
-            return false; 
+            catch
+            {
+                // ignored
+            }
+
+            return false;
         }
 
-        bool IsLocalUrl(string url)
+        private bool IsLocalUrl(string url)
         {
-            return url.ToLower().IndexOf("ms-appx-web") >= 0 ? true : false;
+            return url.ToLower().IndexOf("ms-appx-web", StringComparison.OrdinalIgnoreCase) >= 0 ? true : false;
         }
 
         #endregion

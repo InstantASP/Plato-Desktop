@@ -1,21 +1,21 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using Windows.UI;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Plato.UWP.DependencyInjection;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Windows.UI.Xaml.Media.Animation;
 using Plato.UWP.Services;
 using Plato.UWP.ViewModels;
 using Plato.UWP.Models;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI;
-using Windows.Storage;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Windows.UI.Xaml.Media.Animation;
+using Plato.UWP.DependencyInjection;
 
 namespace Plato.UWP.Views
 {
@@ -24,6 +24,8 @@ namespace Plato.UWP.Views
     {
 
         public SettingsViewModel ViewModel { get; }
+
+        private static IEnumerable<string> _files = null;
 
         public SettingsView()
         {
@@ -35,8 +37,9 @@ namespace Plato.UWP.Views
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+
             await ViewModel.LoadAsync();
-            (Window.Current.Content as ThemeAwareFrame).AppTheme = ViewModel.Theme;
+            ((ThemeAwareFrame) Window.Current.Content).AppTheme = ViewModel.Theme;
 
             if (!string.IsNullOrEmpty(ViewModel.Url))
             {
@@ -106,11 +109,14 @@ namespace Plato.UWP.Views
             }
 
             // Validate theme
-            if (!string.IsNullOrEmpty(ddlTheme.SelectedValue.ToString()))
+            if (ddlTheme.SelectedValue != null)
             {
-                settings.Theme = ddlTheme.SelectedValue.ToString();
+                if (!string.IsNullOrEmpty(ddlTheme.SelectedValue.ToString()))
+                {
+                    settings.Theme = ddlTheme.SelectedValue.ToString();
+                }
             }
-            
+
             // Save settings
             await settingsManager.SaveSettings(settings);
 
@@ -125,23 +131,35 @@ namespace Plato.UWP.Views
 
         void Image_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            var image = sender as Image;
-            var parent = VisualTreeHelper.GetParent(image) as StackPanel;
-
-            if (image.Name != ViewModel.BackgroundImage)
+            if (sender is Image image)
             {
-                parent.BorderBrush = new SolidColorBrush(Colors.Transparent);
+                var parent = VisualTreeHelper.GetParent(image) as StackPanel;
+
+                if (image.Name != ViewModel.BackgroundImage)
+                {
+                    if (parent != null)
+                    {
+                        parent.BorderBrush = new SolidColorBrush(Colors.Transparent);
+                    }
+                }
+
+                image.Tapped -= Image_Tapped;
             }
-            
-            image.Tapped -= Image_Tapped;
+    
         }
 
         void Image_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            var image = sender as Image;            
-            var parent = VisualTreeHelper.GetParent(image) as StackPanel;
-            parent.BorderBrush = new SolidColorBrush(Colors.MediumSlateBlue);     
-            image.Tapped += Image_Tapped;
+            if (sender is Image image)
+            {
+                if (VisualTreeHelper.GetParent(image) is StackPanel parent)
+                {
+                    parent.BorderBrush = new SolidColorBrush(Colors.MediumSlateBlue);
+                }
+
+                image.Tapped += Image_Tapped;
+            }
+         
         }
 
         async void Image_Tapped(object sender, TappedRoutedEventArgs e)
@@ -165,8 +183,9 @@ namespace Plato.UWP.Views
 
         void ClearSelectedImage()
         {         
-            foreach (StackPanel stackPanel in pnlBackgrounds.Children)
+            foreach (var uiElement in pnlBackgrounds.Children)
             {
+                var stackPanel = (StackPanel) uiElement;
                 stackPanel.BorderBrush = new SolidColorBrush(Colors.Transparent);
             }      
         }
@@ -181,10 +200,10 @@ namespace Plato.UWP.Views
                 return;
             }
 
-            foreach (StackPanel stackPanel in pnlBackgrounds.Children)
+            foreach (var uiElement in pnlBackgrounds.Children)
             {
-                var image = stackPanel.Children[0] as Image;
-                if (image != null)
+                var stackPanel = (StackPanel) uiElement;
+                if (stackPanel.Children[0] is Image image)
                 {
                     if (image.Name == ViewModel.BackgroundImage)
                     {
@@ -194,44 +213,38 @@ namespace Plato.UWP.Views
             }
 
         }
-
-
-        private static IEnumerable<string> _files = null;
-
+        
         async void LoadImages()
         {
             if (_files == null)
             {
                 _files = await GetAssetFiles("Assets/Backgrounds");
             }
-            
+
             if (_files != null)
             {
-                if (_files != null)
+                foreach (var filePath in _files)
                 {
-                    var i = 0;
-                    foreach (var filePath in _files)
+                    var random = await Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(new Uri($"ms-appx:///{filePath}")).OpenReadAsync();
+                    var image = new Image();
+                    var bitmapImage = new BitmapImage();
+                    var stackPanel = new StackPanel
                     {
-                        var random = await Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(new Uri($"ms-appx:///{filePath}")).OpenReadAsync();
-                        var image = new Image();
-                        var bitmapImage = new BitmapImage();
-                        var mystackPanel = new StackPanel();
-                        mystackPanel.BorderBrush = new SolidColorBrush(Colors.Transparent);
-                        mystackPanel.BorderThickness = new Thickness(5);
-                        mystackPanel.Margin = new Thickness(5);
-                        image.Name = filePath;
-                        image.Margin = new Thickness(1);
-                        bitmapImage.SetSource(random);
-                        image.Source = bitmapImage;
-                        image.Opacity = 0;
-                        image.Stretch = Stretch.UniformToFill;
-                        mystackPanel.Children.Add(image);
-                        image.PointerEntered += Image_PointerEntered;
-                        image.PointerExited += Image_PointerExited;
-                        image.Loaded += new RoutedEventHandler(OnImageLoad);
-                        pnlBackgrounds.Children.Add(mystackPanel);
-                        i++;
-                    }
+                        BorderBrush = new SolidColorBrush(Colors.Transparent),
+                        BorderThickness = new Thickness(5),
+                        Margin = new Thickness(5)
+                    };
+                    image.Name = filePath;
+                    image.Margin = new Thickness(1);
+                    bitmapImage.SetSource(random);
+                    image.Source = bitmapImage;
+                    image.Opacity = 0;
+                    image.Stretch = Stretch.UniformToFill;
+                    stackPanel.Children.Add(image);
+                    image.PointerEntered += Image_PointerEntered;
+                    image.PointerExited += Image_PointerExited;
+                    image.Loaded += new RoutedEventHandler(OnImageLoad);
+                    pnlBackgrounds.Children.Add(stackPanel);
                 }
             }
             SetSelectedImage();
@@ -268,12 +281,7 @@ namespace Plato.UWP.Views
             }
 
             var files = await folder.GetFilesAsync();
-            if (files != null)
-            {               
-                return from file in files select (rootPath + "/" + file.Name); ;
-            }
-
-            return null;
+            return files?.Select(file => (rootPath + "/" + file.Name));
 
         }
 
