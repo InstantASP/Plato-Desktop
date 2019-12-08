@@ -20,7 +20,7 @@ namespace Plato.UWP.Views
     public sealed partial class MainView : Page
     {
 
-        bool _firstRequest = true;
+        private bool _firstRequest = true;
 
         public MainViewModel ViewModel { get; }
 
@@ -294,8 +294,8 @@ namespace Plato.UWP.Views
                 InvokeScript($"if (window.$.Plato) {{ window.$.Plato.storage.setCookie('plato-theme', '{theme}'); }}");
             }
 
-            /* window.external.notify usage below reuqires the app to be listed 
-             * within the packages manifest file as shown below...
+            /* window.external.notify usage below requires the apps URL
+             * to be listed within the packages manifest file as shown below...
                 <uap:ApplicationContentUriRules>
                     <uap:Rule Type="include" Match="http://localhost:50440/" WindowsRuntimeAccess="none"/>        
                 </uap:ApplicationContentUriRules>
@@ -306,13 +306,15 @@ namespace Plato.UWP.Views
                 window.alert = function(msg) { window.external.notify('typeAlert:' + msg); }
                 window.confirm = function() { return true } // window.confirm is not supported in webview for UWP
                 
+                // Is Plato available?
                 if (window.$.Plato) {    
                     
-                    // Wrapped fixed content within a dummy div to prevent stickyness
+                    // Wrap fixed content within a dummy div to prevent sticky layout
                     $('.layout-header-content').wrap($('<div>'));
                     $('.layout-sidebar-content').wrap($('<div>'));
                     $('.layout-asides-content').wrap($('<div>'));
-                    // Add custom CSS
+
+                    // Add CSS to override default Plato styles
                     window.$.Plato.utils.addCss('{css}'); 
 
                 }                
