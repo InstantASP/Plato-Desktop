@@ -106,6 +106,7 @@ namespace Plato.UWP.Views
             if (ok)
             {
                 settings.Url = uriResult.ToString();
+                settings.PreviousUrl = uriResult.ToString();
             }
 
             // Validate theme

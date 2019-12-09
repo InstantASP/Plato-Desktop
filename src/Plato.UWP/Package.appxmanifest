@@ -9,7 +9,7 @@
   <Identity
     Name="InstantASPLtd.PlatoDesktop"
     Publisher="CN=1CF1064C-0C49-4D03-B8BE-46B56F3E5BA1"
-    Version="1.0.0.0" />
+    Version="1.0.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="4259845f-a763-4241-b122-b1182f04df3f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

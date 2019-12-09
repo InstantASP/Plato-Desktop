@@ -60,19 +60,16 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Column="0" Grid.Row="0">
-
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="6*" />
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
-
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Grid.Column="0">
                     <AppBarButton x:Name="Back" Icon="Back" ToolTipService.ToolTip="Back" Click="Back_Click"/>
                     <AppBarButton x:Name="Forward" Icon="Forward" ToolTipService.ToolTip="Forward" Click="Forward_Click"/>
                     <AppBarButton x:Name="Refresh" Icon="Refresh" ToolTipService.ToolTip="Refresh" Click="Refresh_Click"/>
                 </StackPanel>
-
                 <Grid Grid.Column="1" HorizontalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20" />
@@ -102,28 +99,22 @@
                         LostFocus="FullAddress_LostFocus"                        
                         VerticalAlignment="Center"/>
                 </Grid>
-
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="2">
                     <AppBarButton Icon="Setting" ToolTipService.ToolTip="Settings" Click="Settings_Click"/>
                     <AppBarButton Icon="Help" ToolTipService.ToolTip="About" Click="btnAbout_Click"/>
                 </StackPanel>
             </Grid>
-
             <StackPanel Grid.Column="0" Grid.Row="1"  
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
                 <ProgressRing x:Name="InitialLoader" IsActive="True" Height="100" Width="100"/>
             </StackPanel>
-
             <WebView Grid.Column="0" Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"                     
                 x:Name="WebView" 
-                 DefaultBackgroundColor="Transparent"
-                 Source="https://plato.instantasp.co.uk/"/>
-
+                DefaultBackgroundColor="Transparent"/>
         </Grid>
-
     </Grid>
 </Page>
     

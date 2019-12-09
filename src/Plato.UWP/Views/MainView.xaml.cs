@@ -153,12 +153,9 @@ namespace Plato.UWP.Views
             var dialog = new Windows.UI.Popups.MessageDialog(message);
             if (type.Equals("typeConfirm"))
             {
-                dialog.Commands.Add(new UICommand(
-                    "Yes",
-                    new UICommandInvokedHandler(this.CommandInvokedHandler)));
-                dialog.Commands.Add(new UICommand(
-                    "Cancel",
-                    new UICommandInvokedHandler(this.CommandInvokedHandler)));
+                var cmd = new UICommandInvokedHandler(this.CommandInvokedHandler);
+                dialog.Commands.Add(new UICommand("Yes", cmd));
+                dialog.Commands.Add(new UICommand("Cancel",  cmd));
                 dialog.DefaultCommandIndex = 0;
                 dialog.CancelCommandIndex = 1;
             }
