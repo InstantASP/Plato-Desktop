@@ -6,13 +6,7 @@ namespace Plato.UWP.Configuration
     public static class AppInfo
     {
 
-        public static StorageFolder LocalFolder
-        {
-            get
-            {
-                return ApplicationData.Current.LocalFolder;        
-            }
-        }
+        public static StorageFolder LocalFolder => ApplicationData.Current.LocalFolder;
 
         public static string Version
         {
