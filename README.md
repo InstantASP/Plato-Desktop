@@ -1,16 +1,16 @@
 Plato Desktop is a companion app for [Plato](https://github.com/InstantASP/plato). Plato Desktop offers a simple native experience to ease accessing your Plato site. Plato Desktop is designed primarily for those authoring content or helping users within your Plato installation but can be used by anyone to ease accessing your Plato content. 
 
-You can download Plato Desktop at https://plato.instantasp.co.uk/download
+You can download the Plato Desktop app via the Microsoft Store. Please see the Plato Desktop download page for further details at https://plato.instantasp.co.uk/download
 
-## Key Features
+# Key Features
 
-- Easy access to your Plato site
+- Easy access to your [Plato site](https://github.com/InstantASP/plato)
 - Pin Plato to your taskbar or desktop
 - Remembers where you left off
 - Light & dark modes
 - Customizable background images
 
-## Plato Desktop In Action
+# Plato Desktop In Action
 
 You can see below several screen grabs showing Plato Desktop in action...
 
@@ -50,22 +50,26 @@ Below you can see the Plato administrator dashboard within the Plato Desktop app
 
 ![Plato Desktop Admin Dashboard](https://plato.instantasp.co.uk/plato.site/content/images/desktop/dashboard-dark.png "enter image title here")
 
-## Requirements
+# Requirements
 
-Plato Desktop requires Windows 10 and an active internet connection. Whilst Plato Desktop offers limited offline support you will get the best expereince with an active internet connection whilst using Plato Desktop. Plato Desktop is designed to work with Plato 1.0.9 and above. Earlier versions of the Plato web application will work but theme changes won't be applied. 
+Plato Desktop requires Windows 10 and an active internet connection. Whilst Plato Desktop offers limited offline support you will get the best expereince with an active internet connection. Plato Desktop is designed to work with Plato 1.0.9 and above. Earlier versions of the Plato web application will work but theme changes won't be applied. 
 
-## Download
+# Download
 
 You can download the official Plato Desktop app via the Microsoft Store. Please see the Plato Desktop download page for further details at https://plato.instantasp.co.uk/download
 
-## Open Source
+# License
 
-Plato Desktop is free & open source software. Plato Desktop is a UWP (Universal Windows Platform) app designed for Windows 10. Developers are free to customize Plato Desktop and offer a branded tailored sideloaded version of the app to better support there users.
+Plato Desktop is **100% free** and **open source** software licensed under the GNU General Public License 3.0. Before using Plato please review [the GPL 3.0 license](https://github.com/InstantASP/Plato-Desktop/blob/master/LICENSE.md) and ensure your happy with the terms and conditions defined by the license.
 
-## Questions
+# Questions
 
-Please post any questions related to Plato Desktop via our Q&A site[](https://plato.instantasp.co.uk/questions/categories/46/plato-desktop)Q&A site.
+Please post any questions related to Plato Desktop via our [Q&A site](https://plato.instantasp.co.uk/questions/categories/46/plato-desktop).
 
-## Issues
+# Issues
 
-Please report any bugs or issues you encounter whilst using Plato Desktop here[](https://plato.instantasp.co.uk/issues/categories/49/plato-desktop)here,
+Please report any bugs or issues you may encounter whilst using Plato Desktop [here](https://plato.instantasp.co.uk/issues/categories/49/plato-desktop),
+
+# Suggestions
+
+Don't hesitate to post your suggestions to help improve Plato Desktop [here](https://plato.instantasp.co.uk/ideas/categories/48/plato-desktop),
